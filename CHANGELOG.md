@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.1 — 2026-07-20
+
+- **Fixed: `/plugin install maestro@cockpit` failed on machines without GitHub SSH keys.**
+  The `github` plugin-source type clones over SSH, so the install died with
+  `Host key verification failed` for anyone authenticating to GitHub over HTTPS
+  (gh CLI, credential manager) — the common case. Switched the maestro entry to the
+  `url` source type with an explicit `https://github.com/leobbaroni/maestro.git`,
+  which clones over HTTPS and needs no SSH setup. Verified end-to-end: both plugins
+  now install from this marketplace alone.
+
 ## 1.0.0 — 2026-07-20
 
 Initial release: seven process skills, harness-neutral (Claude Code native, Codex via
