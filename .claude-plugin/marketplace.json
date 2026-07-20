@@ -13,8 +13,8 @@
     {
       "name": "maestro",
       "source": {
-        "source": "github",
-        "repo": "leobbaroni/maestro"
+        "source": "url",
+        "url": "https://github.com/leobbaroni/maestro.git"
       },
       "description": "Unified design, motion, 3D, and video super skill — eight upstream knowledge bases distilled into one skill with a grill-first process."
     }
