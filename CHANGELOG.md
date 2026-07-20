@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.0 — 2026-07-20
+
+- **pilot: new "Crew proposal" step.** Before any fan-out to `orchestrate` (PLAN handoff,
+  KICKOFF, a 3+ task BUILD batch, a Tier-2 review wave), pilot now proposes *which models
+  run which work* and gets approval instead of routing silently: read what the session can
+  actually reach, map the four roles (lead / hard / mechanical / review), show the concrete
+  per-task assignment with its cost-latency implication, and offer proposal vs all-frontier
+  vs all-fast vs custom. The accepted mapping is remembered for the session — asked once,
+  not per task — and a user-named model always wins. Small uniformly-mechanical batches
+  state the crew in one line and skip the ceremony.
+- Harness-aware by design: on Claude Code this is a real per-subagent model choice
+  (mixed-tier batches, reviewers differing from implementers); on Codex and other
+  single-model harnesses it degrades honestly into a sequencing-and-escalation decision
+  rather than implying a choice the harness can't offer.
+- `orchestrate` now honors a mapping pilot already got approved (no re-asking), announces
+  the crew before spending when it wasn't, and says so out loud when it escalates a failed
+  step to a stronger tier.
+
 ## 1.0.1 — 2026-07-20
 
 - **Fixed: `/plugin install maestro@cockpit` failed on machines without GitHub SSH keys.**

@@ -27,6 +27,8 @@ Mega-prompts get items dropped. Before any work:
 
 On Claude Code the current defaults are: lead/design → Fable 5 (`model: "fable"`), hard → Opus 4.8 (`model: "opus"`), easy → Sonnet 5 (`model: "sonnet"`); prefer the Workflow tool for fan-outs of 3+ agents, the Agent tool for 1–2, and give agents that edit files in parallel `isolation: "worktree"`. Do not switch the top-level model to route work — route at the subagent level. On harnesses without subagents, run the batch sequentially yourself in difficulty order (hard items first, while context is freshest) and keep the same per-item reporting.
 
+**Announce the crew before spending on it.** If `pilot` already proposed a model mapping and the user accepted it, use that mapping and do not re-ask. Otherwise state the assignment in one short table (task or dimension → role → model) before the first agent runs, and invite correction — the user may know a step deserves a stronger model than its difficulty suggests. Any model the user names explicitly wins over these defaults, always. Escalate a step to the stronger tier when it fails once; say so when you do, rather than silently re-running it bigger.
+
 ## 3. Standing defaults (apply without being asked)
 
 - **UI, design, motion, and video work routes through the `maestro` skill when it's installed** — its Grill Gate for briefs, design-foundations/direction modules for implementation, design-audit for review, and toolbox for technique/asset/library choices. For new screens or significant redesigns, run maestro's mockup fan-out first and wait for the user's pick. Without maestro, do the design work directly to the same standard and say the specialist was absent.

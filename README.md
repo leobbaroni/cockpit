@@ -8,7 +8,7 @@ Cockpit ships seven interlocking process skills, and its marketplace also serves
 
 | Skill | Discipline |
 |---|---|
-| **pilot** | The flagship. Detects the project phase (PLAN / KICKOFF / BUILD / REVIEW / IMPROVE / DEBUG / DELIVER), enforces that phase's ritual, and routes to specialists. Ultra-planner mode produces SPEC + PLAN + risk register and stops before code; tiered review mode routes correctness/security/simplification/UX to the right reviewer. |
+| **pilot** | The flagship. Detects the project phase (PLAN / KICKOFF / BUILD / REVIEW / IMPROVE / DEBUG / DELIVER), enforces that phase's ritual, and routes to specialists. Ultra-planner mode produces SPEC + PLAN + risk register and stops before code; tiered review mode routes correctness/security/simplification/UX to the right reviewer; and before any fan-out it proposes the **crew** — which model runs which work — for your approval rather than choosing silently. |
 | **grilling** | The brief-locking interview: one question at a time, recommended answer attached, until scope and non-goals are pinned. |
 | **grill-with-docs** | Grilling plus documentation — glossary terms into CONTEXT.md and ADRs as decisions land, PLAN.md at the end. |
 | **orchestrate** | Lead-dev mode for task batches: parse-and-echo every ask, route to subagents by difficulty, verify behaviorally, review with fresh eyes, report per-item — never silent omission. |

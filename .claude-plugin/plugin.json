@@ -1,7 +1,7 @@
 {
   "name": "cockpit",
   "displayName": "Cockpit",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "The process pack: pilot (phase detection, ultra-planning, review routing), grilling (brief-locking interviews), grill-with-docs (grilling + live ADRs/glossary), orchestrate (multi-agent task batches), handoff (logs, guides, delivery), diagnosing-bugs (repro-first debugging), and domain-modeling (glossary + ADRs). Harness-neutral: Claude Code native, Codex via AGENTS.md.",
   "author": {
     "name": "leobbaroni",
