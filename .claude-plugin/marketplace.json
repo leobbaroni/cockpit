@@ -1,0 +1,22 @@
+{
+  "name": "cockpit",
+  "owner": {
+    "name": "leobbaroni",
+    "email": "leobbaroni@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "cockpit",
+      "source": "./",
+      "description": "The process pack: pilot (phase detection, ultra-planning, review routing), grilling, grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling. Claude Code native, Codex via AGENTS.md."
+    },
+    {
+      "name": "maestro",
+      "source": {
+        "source": "github",
+        "repo": "leobbaroni/maestro"
+      },
+      "description": "Unified design, motion, 3D, and video super skill — eight upstream knowledge bases distilled into one skill with a grill-first process."
+    }
+  ]
+}
