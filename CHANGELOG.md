@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 — 2026-07-20
+
+- Marketplace: maestro entry description updated for maestro 3.0.0 — ten upstream
+  knowledge bases (taste-skill and hallmark absorbed) and the new vendored depth
+  library. Source URL unchanged; the maestro repo versions itself.
+
 ## 1.1.0 — 2026-07-20
 
 - **pilot: new "Crew proposal" step.** Before any fan-out to `orchestrate` (PLAN handoff,
