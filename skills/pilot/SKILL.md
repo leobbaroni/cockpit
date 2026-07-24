@@ -88,7 +88,13 @@ Never fan work out on a silently-chosen crew. Whenever a batch is about to go to
 | **Mechanical** | known fixes, renames, boilerplate, docs, config, bulk edits | fast/cheap tier (Sonnet 5; Haiku 4.5 for trivial bulk) |
 | **Review** | fresh adversarial eyes | a *different* model from the one that wrote the code, whenever the harness offers one — diverse perspective catches what self-review cannot |
 
-**The session model is the user's standing instruction.** Whatever they switched to is the lead and the designer — do not propose demoting it, do not route lead work to a subagent on a different model to "save cost", and do not switch the top-level model to route work. If the session model is already the strongest reasoner available, lead and hard collapse into one tier; say so in a line instead of inventing a distinction. Route *down* to the fast tier for mechanical work and *sideways* to a different model for adversarial review; those are the only two moves that leave the user's choice intact.
+**The session model is the user's standing instruction.** Whatever they switched to is the lead and the designer — do not propose demoting it, do not route lead work to a subagent on a different model to "save cost", and do not switch the top-level model to route work. **The lead role is what never moves**; implementation work routes freely around it:
+
+- **Down** to the fast tier for mechanical items.
+- **Up** to the strongest reasoner for hard implementation — architecture, tricky bugs, anything that already failed once. Routing a hard *subtask* up is not a demotion of the lead; the lead still decomposes, reviews, and decides.
+- **Sideways** to a different model for adversarial review.
+
+If the session model is already the strongest reasoner available, the up-route is a no-op and lead and hard collapse into one tier; say so in a line instead of inventing a distinction.
 
 **3. Propose concretely.** Show the assignment for *this* batch — each task or review dimension → role → model — with a one-line reason and the honest cost/latency implication. A table the user can scan and correct beats a paragraph of philosophy.
 

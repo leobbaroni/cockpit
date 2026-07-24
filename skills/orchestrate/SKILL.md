@@ -25,15 +25,15 @@ Mega-prompts get items dropped. Before any work:
 | Easy/mechanical: apply a known fix, rename, boilerplate, docs, config | A fast-tier subagent |
 | Explicit model named by the user | That model, always |
 
-**The session model is the lead and the designer.** Whatever the user selected runs orchestration, design judgment, and final review — never demote it to save cost, never hand lead work to a subagent on a different model, never switch the top-level model to route work. Route *down* to the fast tier for mechanical items and *sideways* to a different model for adversarial review; those two moves leave the user's choice intact. When the session model is already the strongest reasoner available, lead and hard are one tier — say so instead of inventing a split.
+**The session model is the lead and the designer.** Whatever the user selected runs orchestration, design judgment, and final review — never demote it to save cost, never hand lead work to a subagent on a different model, never switch the top-level model to route work. **The lead role is what never moves**; implementation routes around it in three directions: *down* to the fast tier for mechanical items, *up* to the strongest reasoner for hard implementation (routing a hard subtask up is not a demotion — the lead still decomposes, reviews, and decides), and *sideways* to a different model for adversarial review. When the session model is already the strongest reasoner available the up-route is a no-op and lead and hard are one tier — say so instead of inventing a split.
 
-On Claude Code the current defaults are: lead/design → the session's own model (unchanged), hard → Opus 5 (`model: "opus"`), easy → Sonnet 5 (`model: "sonnet"`); prefer the Workflow tool for fan-outs of 3+ agents, the Agent tool for 1–2, and give agents that edit files in parallel `isolation: "worktree"`. On harnesses without subagents, run the batch sequentially yourself in difficulty order (hard items first, while context is freshest) and keep the same per-item reporting.
+On Claude Code the current defaults are: lead/design → the session's own model (unchanged), hard → Opus 5 (`model: "opus"`), easy → Sonnet 5 (`model: "sonnet"`; Haiku 4.5 for trivial bulk); prefer the Workflow tool for fan-outs of 3+ agents, the Agent tool for 1–2, and give agents that edit files in parallel `isolation: "worktree"`. On harnesses without subagents, run the batch sequentially yourself in difficulty order (hard items first, while context is freshest) and keep the same per-item reporting.
 
 **Announce the crew before spending on it.** If `pilot` already proposed a model mapping and the user accepted it, use that mapping and do not re-ask. Otherwise state the assignment in one short table (task or dimension → role → model) before the first agent runs, and invite correction — the user may know a step deserves a stronger model than its difficulty suggests. Any model the user names explicitly wins over these defaults, always. Escalate a step to the stronger tier when it fails once; say so when you do, rather than silently re-running it bigger.
 
 ## 3. Write the prompt as if the agent can never ask you anything
 
-Because it can't. A subagent starts cold: no conversation, no prior turns, none of the reasoning that made you choose this task, this approach, this file. **Whatever is not in the prompt does not exist for it.** The lead is the strongest model in the room and the delegation prompt is the only channel its judgment travels through — a thin prompt throws that judgment away and buys back generically-correct, contextually-wrong work.
+Because it can't. A subagent starts cold: no conversation, no prior turns, none of the reasoning that made you choose this task, this approach, this file. **Whatever is not in the prompt does not exist for it.** The lead holds the full context and the delegation prompt is the only channel it travels through — a thin prompt throws that context away and buys back generically-correct, contextually-wrong work.
 
 Over-specify on purpose. A long prompt costs tokens once; a misunderstood task costs a rewrite, a review cycle, and the user's trust. Every delegation carries:
 
@@ -58,6 +58,8 @@ Rules that carry the intent:
 - **Never assume shared vocabulary.** Project codenames, your own shorthand from earlier turns, and abbreviations you invented mean nothing to a cold agent. Spell them out once.
 
 Read the returned work against the prompt you actually wrote before accepting it. When an agent misses, check the prompt first — most misses are missing context, not a weak model, and re-running with a better prompt beats escalating a tier.
+
+**On harnesses without subagents**, write the same seven blocks as your own working brief before starting each item, and read the result against it the same way. The contract is a thinking checklist first and a delegation format second — writing down the rejected alternatives and the acceptance criteria catches the same drift whether the reader is another agent or you in twenty minutes.
 
 ## 4. Standing defaults (apply without being asked)
 

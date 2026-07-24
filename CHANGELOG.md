@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.1 — 2026-07-20
+
+Adversarial-review fixes on 1.2.0.
+
+- **"The only two moves" was self-contradictory.** Both skills said routing *down* and
+  *sideways* were the only moves that leave the user's model choice intact, while the crew
+  table simultaneously mandated hard work → Opus 5 — a third move (*up*) whenever the session
+  isn't already on it. Restated as three moves with the actual invariant named: the **lead
+  role** never moves; implementation routes down, up, or sideways around it, and routing a
+  hard subtask up is not a demotion because the lead still decomposes, reviews, and decides.
+- orchestrate §3 justified itself with "the lead is the strongest model in the room" — which
+  stops being true exactly when §2 works as designed (session on a fast model, hard work
+  routed up). Rewritten to the durable reason: the lead holds the full context.
+- §3 was the only section in the pack with no no-subagent fallback, and §5 depends on it —
+  added: without subagents, write the seven blocks as your own working brief per item; the
+  contract is a thinking checklist first, a delegation format second.
+- orchestrate's fast tier now names the Haiku rung for trivial bulk, matching pilot's table.
+
 ## 1.2.0 — 2026-07-20
 
 - **The session's model is the lead and the designer.** Whatever model the user selected
