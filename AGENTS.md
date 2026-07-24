@@ -24,6 +24,8 @@ Skills reference each other by name (pilot routes to grilling, orchestrate, diag
 
 Design, UI, motion, 3D, and video work routes to the **maestro** skill — a separate repo, [github.com/leobbaroni/maestro](https://github.com/leobbaroni/maestro), with its own AGENTS.md. Install it alongside cockpit (the README covers both harnesses).
 
+Two things to know when routing to it: its interview asks **the user** which design house should lead the look (structure-led / polish-led / craft-led / blend) — that pick is the user's, and it governs the rest of the project. And when a request names a design action (audit, critique, redesign, study a reference, polish, bolder, typeset, brand kit…), maestro's `commands` module maps it to the originating project's real protocol — run that, not an approximation of it.
+
 ## Codex setup
 
 For a global install, add one line to `~/.codex/AGENTS.md` (create the file if absent):

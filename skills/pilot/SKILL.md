@@ -43,7 +43,7 @@ For "plan this properly" requests and every KICKOFF. The product is a plan anoth
 
 ## KICKOFF — PLAN, then build
 
-Run PLAN in full (never skip the interview for a multi-day build), ask once for the project's push policy and record it in the project's agent instructions file (`CLAUDE.md` / `AGENTS.md`), then propose the crew (see *Crew proposal*) and hand the batch to `orchestrate`. New UI surfaces go through `maestro`'s mockup fan-out gate (when installed) before implementation.
+Run PLAN in full (never skip the interview for a multi-day build), ask once for the project's push policy and record it in the project's agent instructions file (`CLAUDE.md` / `AGENTS.md`), then propose the crew (see *Crew proposal*) and hand the batch to `orchestrate`. New UI surfaces go through `maestro`'s mockup fan-out gate (when installed) before implementation — and its grill decides, with the user, which design house leads the project's look; that pick belongs in the SPEC alongside the rest of the brief.
 
 ## BUILD — next task, done properly
 
@@ -57,13 +57,13 @@ Never review by reading top-to-bottom and reacting. Pick the tier, route the dim
 
 **Tier 2 — adversarial wave** (release gates, "thorough audit", security-sensitive surfaces, or Tier 1 found something structural): independent fresh reviewers per dimension — correctness, security, simplification, UX — then adversarial verification of every finding before it's reported. Findings that survive route back through the fix loop; two consecutive clean rounds = done. Run this via `orchestrate`'s review wave, proposing the crew first — reviewers should be a different model from the implementer when the harness allows it.
 
-**Dimension routing** (use the specialist when the harness provides it; when it doesn't, run that dimension's review yourself to the same standard): correctness → `code-review`; security → `security-review`; dead weight / over-engineering → `simplify`; a GitHub PR → `review`; UI/UX → `maestro`'s design-audit module; architecture-level doubts → grill the design (`grilling`) and check it against `docs/adr/`.
+**Dimension routing** (use the specialist when the harness provides it; when it doesn't, run that dimension's review yourself to the same standard): correctness → `code-review`; security → `security-review`; dead weight / over-engineering → `simplify`; a GitHub PR → `review`; UI/UX → `maestro`'s design-audit module, or one of the named review protocols its `commands` module routes to (usability critique, technical audit, structural slop audit — they ask different questions and can run together); architecture-level doubts → grill the design (`grilling`) and check it against `docs/adr/`.
 
 **Report format:** findings ranked by severity, each anchored to `file:line`, each stating the concrete failure scenario (inputs → wrong outcome) — no style nits dressed as findings. End with fix routing: trivial fixes applied on approval, substantial ones as tasks.
 
 ## IMPROVE — no work without criteria
 
-If the ask is vague ("make it better", "feels off"), extract a concrete brief FIRST — one batched question, not a build attempt: **one reference** (site, app, screenshot — if it's behind a login, ask for a screenshot instead of silently skipping), **2–3 banned qualities** ("no card grid", "not so text-dense"), **one checkable done-condition** ("the table fits 380px without horizontal scroll"). Then route: UI/UX → `maestro` (critique loop; mockup fan-out if the direction itself is in question); dead weight → `simplify`; suspected bug with a known diff → REVIEW, cause unknown → DEBUG; performance → **measure first** (profile/timing baseline), never optimize blind. Re-verify against the done-condition before reporting.
+If the ask is vague ("make it better", "feels off"), extract a concrete brief FIRST — one batched question, not a build attempt: **one reference** (site, app, screenshot — if it's behind a login, ask for a screenshot instead of silently skipping), **2–3 banned qualities** ("no card grid", "not so text-dense"), **one checkable done-condition** ("the table fits 380px without horizontal scroll"). Then route: UI/UX → `maestro` (critique loop; its `commands` module has a named protocol for most improvement asks — bolder, quieter, distill, polish, typeset, layout, clarify — so match the ask to one instead of improvising; mockup fan-out if the direction itself is in question); dead weight → `simplify`; suspected bug with a known diff → REVIEW, cause unknown → DEBUG; performance → **measure first** (profile/timing baseline), never optimize blind. Re-verify against the done-condition before reporting.
 
 ## DEBUG — repro before hypotheses
 
@@ -83,10 +83,12 @@ Never fan work out on a silently-chosen crew. Whenever a batch is about to go to
 
 | Role | Wants | Picks the… *(parenthesised names are today's Claude Code tiers — substitute your harness's equivalents)* |
 |---|---|---|
-| **Lead** | decomposition, judgment, final review, design taste | strongest generalist available (Fable 5) |
-| **Hard** | architecture, tricky bugs, cross-cutting refactors, anything that already failed once | strongest reasoner (Opus 4.8) |
+| **Lead / designer** | decomposition, judgment, final review, design taste | **the model the session is set to** — whatever the user selected, unchanged |
+| **Hard** | architecture, tricky bugs, cross-cutting refactors, anything that already failed once | strongest reasoner (Opus 5) |
 | **Mechanical** | known fixes, renames, boilerplate, docs, config, bulk edits | fast/cheap tier (Sonnet 5; Haiku 4.5 for trivial bulk) |
 | **Review** | fresh adversarial eyes | a *different* model from the one that wrote the code, whenever the harness offers one — diverse perspective catches what self-review cannot |
+
+**The session model is the user's standing instruction.** Whatever they switched to is the lead and the designer — do not propose demoting it, do not route lead work to a subagent on a different model to "save cost", and do not switch the top-level model to route work. If the session model is already the strongest reasoner available, lead and hard collapse into one tier; say so in a line instead of inventing a distinction. Route *down* to the fast tier for mechanical work and *sideways* to a different model for adversarial review; those are the only two moves that leave the user's choice intact.
 
 **3. Propose concretely.** Show the assignment for *this* batch — each task or review dimension → role → model — with a one-line reason and the honest cost/latency implication. A table the user can scan and correct beats a paragraph of philosophy.
 
@@ -141,5 +143,5 @@ Transform tasks into verifiable goals: "add validation" → "write tests for inv
 
 Nothing above requires a specific harness; the mechanics differ:
 
-- **Claude Code:** batched decisions via AskUserQuestion; parallel work and Tier-2 review waves via subagents (Agent/Workflow tools); task batches tracked with the task tools; PLAN pairs naturally with plan mode. Crew proposal is fully live here — each subagent takes its own `model`, so a batch really can run Fable 5 lead / Opus 4.8 hard / Sonnet 5 mechanical, and reviewers can differ from implementers.
+- **Claude Code:** batched decisions via AskUserQuestion; parallel work and Tier-2 review waves via subagents (Agent/Workflow tools); task batches tracked with the task tools; PLAN pairs naturally with plan mode. Crew proposal is fully live here — each subagent takes its own `model`, so a batch really can run the session's own model as lead / Opus 5 on the hard items / Sonnet 5 on the mechanical ones, with reviewers on a different model from the implementers.
 - **Codex / other AGENTS.md harnesses:** ask questions as plain text, one at a time, each with a recommended answer; no subagents — run Tier-2 review as sequential fresh passes, one dimension at a time, re-reading the diff with a single lens per pass; track batches as checkboxes in `PLAN.md`; PLAN mode = write the planning files and touch nothing in `src/`. Crew proposal shrinks to a **sequencing and escalation** decision, not a per-agent one: the session model does everything, so propose *ordering* (hardest work first, while context is freshest) and *when to escalate* — name the point at which the user should rerun a step on a stronger model, or restart the session on one. If the harness can switch models mid-session, say what to switch to and when; if it can't, say so plainly rather than implying a choice that doesn't exist.

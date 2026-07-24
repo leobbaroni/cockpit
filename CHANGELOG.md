@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.2.0 — 2026-07-20
+
+- **The session's model is the lead and the designer.** Whatever model the user selected
+  now runs orchestration, design judgment, and final review — pilot's crew table and
+  orchestrate's routing table no longer name a fixed lead tier. Only two moves are allowed
+  against the user's choice: route *down* to the fast tier for mechanical work, and
+  *sideways* to a different model for adversarial review. When the session model is already
+  the strongest reasoner reachable, lead and hard collapse into one tier and the skill says
+  so rather than inventing a split.
+- **Opus 5 replaces Opus 4.8** as the hard/frontier default in both skills.
+- **orchestrate §3, new: "Write the prompt as if the agent can never ask you anything."**
+  A subagent starts cold — no conversation, no prior turns, none of the lead's reasoning —
+  so the delegation prompt is the only channel the lead's judgment travels through. Defines
+  a seven-block contract (objective · why this way, including rejected alternatives ·
+  concrete context pasted verbatim · constraints and non-goals · acceptance criteria ·
+  output contract · escalation) plus the rules that carry intent: give reasoning not just
+  conclusions, quote the user verbatim on anything about taste, state parallel agents'
+  file boundaries, name the tempting-but-wrong finish, and never reference "the above" to
+  something that has no above. When an agent misses, check the prompt before escalating a
+  tier — most misses are missing context, not a weak model.
+- Review-wave prompts get the same treatment, aimed adversarially.
+- maestro routing updated for its 3.1.0 capabilities: the design-house pick belongs to the
+  user (pilot records it in the SPEC), and named design actions route to maestro's
+  `commands` module so the originating project's real protocol runs instead of an
+  approximation. README/AGENTS.md synced (19 reference modules, vendored library).
+
 ## 1.1.1 — 2026-07-20
 
 - Marketplace: maestro entry description updated for maestro 3.0.0 — ten upstream
