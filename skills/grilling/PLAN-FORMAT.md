@@ -35,7 +35,9 @@ One-line goal: what is true when this ships that is not true now.
 Track: <track> — <one line why>. Parked secondary asks: <named, or "none">.
 
 ## Interview Ledger
-One line per question spent: "Q3 export scope → exclude soft-deleted (accepted)". Close with the count.
+One line per question spent: "Q3 export scope → exclude soft-deleted (accepted)". Mark any whose
+answer changed no line of this plan — that one failed the necessity test in hindsight, and two of
+them in a single interview mean the bar for asking is set too low. Close with the count.
 
 ## Goal & Success Criteria
 - <observable, testable — "a user can X and sees Y", never "works well"; numbers where degree matters>

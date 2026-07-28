@@ -1,6 +1,6 @@
 ---
 name: grilling
-description: The interview that turns an opening ask into a build-ready plan. One question at a time, each with a recommended answer, on a visible budget — with every fact tagged as stated, verified, or assumed. Use when the user wants to stress-test a plan or design before building, uses any 'grill' trigger phrase, or hands over a request too big to start on.
+description: The interview that turns an opening ask into a build-ready plan. One question at a time, each with a recommended answer, with the open forks counted down in every turn — and every fact tagged as stated, verified, or assumed. Use when the user wants to stress-test a plan or design before building, uses any 'grill' trigger phrase, or hands over a request too big to start on.
 argument-hint: "[the ask, plan, design, or idea to sharpen]"
 ---
 
@@ -77,11 +77,14 @@ neither: default it, tag it, move on.
    `[assumed]` inline or drop it from the basis.
 3. **A bare "yes" accepts the `Recommended:` line**, not the literal polarity of the question.
    Prefer "A or B?" or open phrasing over yes/no. Free-form answers outrank the options offered.
-4. **Number the questions and show the budget.** Open each question turn with
-   `Locked: <one line> · Open forks: <n> · Q<k>/14`. **Hard cap: 14 questions**, counting every
-   question turn — access requests, the checkpoint, confirmations, and the closing approval all
-   count. Target 3–8 for a typical ask, 0–2 for a tiny one, up to 12 for a large or hazy
-   project. Finishing in three with a tight plan is success, not laziness.
+4. **Number the questions and show the queue.** Open each question turn with
+   `Locked: <one line> · Open forks: <n> · Q<k>`. **There is no fixed cap** — the count is an
+   output of §4, not a budget you spend: what survives the fork test gets asked, nothing else
+   does. A large project earns more questions only by genuinely holding more forks, never by
+   being large. Every question turn counts toward `Q<k>` — access requests, the checkpoint,
+   confirmations, the closing approval — and each one raises the price of the next, because
+   fatigue compounds: the bar for asking climbs as the interview lengthens. `Open forks` must
+   trend toward zero. Finishing in three with a tight plan is success, not laziness.
 5. **Necessity test before every question:** name the two plans the answer forks between. Same
    plan either way → don't ask; decide, tag, move on. A lookup could answer it → look.
 6. **Sharp beats broad.** A named probe extracts a decision; a catch-all extracts one fact at
@@ -94,7 +97,7 @@ neither: default it, tag it, move on.
 ### Turn shape
 
 ```
-Locked: <what is settled, one line> · Open forks: <n> · Q<k>/14
+Locked: <what is settled, one line> · Open forks: <n> · Q<k>
 
 <1–2 sentences naming the fork and the evidence framing it — cite sources for looked-up facts>
 
@@ -124,7 +127,7 @@ an expensive guess. Yes → record the decision. No → that is a stall, and a q
 questions. Then score each `[assumed]` by blast radius × doubt; high on both gets asked, the rest
 stays tagged. Sorted, that is your question queue.
 
-Classify every decision into one of four bins — this is the whole budget discipline:
+Classify every decision into one of four bins — this is the whole question discipline, and the reason the interview needs no cap:
 
 | Bin | Test | What you do |
 |---|---|---|
@@ -138,9 +141,14 @@ Fail any one of the three → it belongs in one of the first three bins.
 ## 5. Ordering, checkpoint, close
 
 Open with your reading of the ask in 1–3 sentences, the single most useful recon finding (cited),
-the access request if you haven't placed it, then Q1 — the fork whose answer redraws the largest
-part of the plan. If recon and the ask already fill every decisive slot, the first reply may be
-the closing turn.
+and the run's shape — "recon left <n> forks I can't settle by looking" — with both ramps standing:
+**"just plan it" closes now on tagged defaults; "grill me harder" digs past them.** That number is
+§4's surviving queue, so it tracks the size of the actual work: a twelve-phase migration holds
+more real forks than a two-phase fix, and says so up front instead of discovering it at question
+nine. It is an estimate, not a promise — a landmine legitimately grows the queue, and the live
+`Open forks` count is the running truth. Then the access request if you haven't placed it, then
+Q1 — the fork whose answer redraws the largest part of the plan. If recon and the ask already
+fill every decisive slot, skip the ceremony: the first reply may be the closing turn.
 
 - **Highest blast radius first.** Scope and shape gate everything below them.
 - **Reserve at least two questions for landmine falsifiers**, early enough that a confirmed one
@@ -156,6 +164,11 @@ the closing turn.
 - **Re-rehearse after every answer.** It kills queued forks (drop them silently, record the
   inherited decision), opens new ones, or detonates a default. When an answer points at
   something unread you can reach, look now.
+- **"Grill me harder" re-opens the defaulted bin.** A user volunteering turns has lowered the
+  price of asking, so the fork test's cost side genuinely changed — walk the Assumptions Ledger
+  from highest blast radius down, converting rows into questions under the full contract:
+  recommended answer, necessity test, one per turn. Deeper means more of the queue, never
+  softer questions, and never questions about naming or cosmetics.
 
 **A landmine that detonates a default gets followed all the way down**, never patched in one
 sentence. "The factory floor has no internet" doesn't edit the deployment section — it flips the
@@ -163,13 +176,20 @@ build to local-first with periodic sync, moves storage on-device, changes the st
 offline test. Re-rehearse from the shape station. A confirmed landmine must visibly change the
 plan, recorded as "constraint → what the plan does about it".
 
-**Checkpoint, once, near mid-budget.** One question spent inviting the user to falsify you is the
+**Checkpoint when scope and shape lock** — the turn after the plan's outline stops moving, before
+the mechanism questions. One question spent inviting the user to falsify you is the
 counterweight to agreement bias. Open with a short digest — what's decided, plus the two or three
 riskiest live assumptions — then aim at the assumption whose failure would most damage the plan:
 "The claim most likely to sink this plan is X. Does it hold? Recommended: it holds — <basis>. A
 bare yes confirms; if it's wrong, say what's true instead and I'll re-plan." Corrections to the
 digest are free; invite them. A load-bearing assumption still unverified after the checkpoint
 gets hedged: verify it, or make verifying it the first build phase with a stated fallback.
+
+**A landmine that redraws the plan resets the checkpoint** — re-checkpoint after re-rehearsing.
+The moment agreement bias is most dangerous is right after the user has watched you rebuild the
+plan around their answer, and a long interview needs that counterweight more often, not less.
+When the close follows immediately anyway, the Defaulted decisions recap carries the digest —
+don't spend a separate turn on it.
 
 **Coverage sweep before closing.** Walk this list once, asking only where a gap is genuinely
 plan-changing and filling every other with an explicit tagged default — an uncovered category
@@ -179,12 +199,18 @@ loading states · non-functional targets (performance numbers, security, observa
 integrations and external dependencies · environment and deployment · edge cases and failure
 handling · completion signals.
 
-**From Q10 on**, rank the remaining forks by cost-of-wrong-branch, spend what's left from the
-top, and default-and-tag the rest. When you would ask Q14, don't — close instead.
+**Spend from the top, close at the waterline.** Every answer re-ranks the open forks by
+cost-of-wrong-branch, so ask from the top. The moment the top-ranked fork would cost less to fix
+wrong than to ask about — and every question already spent raises that asking price — close:
+default-and-tag everything still open. Two consecutive answers that fail to shrink the open-fork
+count mean churn rather than convergence; checkpoint if you haven't, otherwise close. This is what
+replaces a cap, and it is the honest version of one: a question is worth asking when the wrong
+branch is expensive, and a fifteenth question on a real migration can clear that bar while a sixth
+on a one-file fix does not.
 
 Then write the plan (§6), show the **Defaulted decisions** recap — every `[assumed]` on its own
 line so any one can be vetoed cheaply — and ask for approval with "approve" as the recommended
-answer. Named changes → apply them, show only the deltas, re-ask within budget.
+answer. Named changes → apply them and show only the deltas.
 
 ## 6. Delivery — files, not chat
 
@@ -234,8 +260,8 @@ Stop interviewing the moment any of these fires, whichever comes first:
 
 1. The rehearsal runs end to end with no open fork, however few questions that took.
 2. The completion bar in `PLAN-FORMAT.md` is met.
-3. The budget would exceed 14 → default-and-tag everything open, route the riskiest checks into
-   the first build phase.
+3. The top-ranked open fork is cheaper to fix wrong than to ask about → default-and-tag
+   everything open, route the riskiest checks into the first build phase.
 4. The user signals exit — "just plan it", "you pick", visible impatience → finalize immediately
    with tagged defaults.
 

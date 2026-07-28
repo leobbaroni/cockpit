@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.4.0 — 2026-07-28
+
+**The question cap is gone.** 1.3.0 shipped a hard cap of 14 — an arbitrary constant that
+optimized for the agent's economy rather than the project's. The plan is the deliverable, so
+the interview is as long as the work actually is.
+
+- **The count is an output, not a budget.** Whatever survives §4's fork test gets asked;
+  nothing else does. A large project earns more questions only by genuinely holding more
+  forks — never by being large. The status line drops `/14` and keeps both live numbers:
+  `Locked: … · Open forks: <n> · Q<k>`.
+- **The waterline replaces the cap.** Every answer re-ranks the open forks by
+  cost-of-wrong-branch; close the moment the top-ranked fork would cost less to fix wrong
+  than to ask about — with the asking price rising as the interview lengthens, because
+  fatigue compounds. This is the honest version of what 14 was approximating: a fifteenth
+  question on a real migration can clear that bar while a sixth on a one-file fix does not.
+  It is a per-question condition, not a total, so it scales with the project natively.
+- **The run's shape is stated up front and the user sets it.** The opening turn names the
+  surviving-fork count — "recon left <n> forks I can't settle by looking" — with both ramps
+  standing: *"just plan it"* closes now on tagged defaults, *"grill me harder"* digs past
+  them. The pack had an exit ramp and no way to ask for more depth; now it has both.
+- **"Grill me harder" has mechanics, not vibes:** it re-opens the default-and-tag bin, walking
+  the Assumptions Ledger from highest blast radius down and converting rows into questions
+  under the full contract. Deeper means more of the queue, never softer questions.
+- **The checkpoint is triggered structurally**, not at "mid-budget" — the turn after scope and
+  shape stop moving, before the mechanism questions — and it **re-fires after any landmine
+  that redraws the plan**, since agreement bias is most dangerous right after the user has
+  watched you rebuild around their answer. A long run needs that counterweight more, not less.
+- **A churn signal, since there's no ceiling to hit:** two consecutive answers that fail to
+  shrink the open-fork count mean the interview is circling, not converging — checkpoint if
+  you haven't, otherwise close.
+- **The Interview Ledger now audits itself.** Mark any question whose answer changed no line
+  of the plan; that one failed the necessity test in hindsight, and two in one interview mean
+  the bar for asking is set too low. That's the feedback loop the cap used to substitute for.
+- Two changes considered and rejected on review: a periodic re-rank (weaker than the existing
+  "re-rehearse after every answer", which is already continuous), and a rule requiring each
+  question to name the plan slot it fills — which duplicates the necessity test and would
+  reward leaving slots undefaulted to keep questions justifiable.
+
 ## 1.3.0 — 2026-07-28
 
 **grilling rewritten from a 10-line prompt into the pack's planning engine**, merging a
