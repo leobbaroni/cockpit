@@ -32,14 +32,15 @@ Then declare, in two lines max: **"Phase: <X> — because <signal>. Next: <concr
 
 For "plan this properly" requests and every KICKOFF. The product is a plan another session — or another agent — can execute without re-asking anything.
 
-1. **Interview first.** Run the `grilling` skill; when new domain terms or hard-to-reverse choices surface, fold in `domain-modeling` (that pairing is the `grill-with-docs` skill). One question at a time, recommended answer attached, until scope, non-goals, and terms are pinned. Twenty minutes of interviewing is cheaper than days of spec-correction rounds.
-2. **Freeze into files, not chat:**
-   - `SPEC.md` — the contract: rules, constraints, non-goals, spec corrections as they land.
-   - `PLAN.md` — ordered build steps, each small enough to verify alone, each with its acceptance check written as a command or observable behavior (`step → verify: <check>`). Unknowns become named spike steps, not guesses.
+1. **Interview first.** Run the `grilling` skill — it owns the discipline: look before you ask, one question per turn with a recommended answer, a visible budget capped at 14, and every fact tagged `(user)` / `(verified: source)` / `[assumed: default — if wrong: …]`. When new domain terms or hard-to-reverse choices surface, fold in `domain-modeling` (that pairing is the `grill-with-docs` skill). Twenty minutes of interviewing is cheaper than days of spec-correction rounds.
+2. **Pick the track, not just the phase.** The phase says which ritual applies now; the track (`grilling/TRACKS.md`) says what this plan must decide and which invariants bind its build phases — bug fix reproduces first, performance measures first, migration deletes the old path last, from scratch walks a skeleton through the riskiest unknown. Pick it silently and record it in the plan's Classification section, with every displaced ask parked by name.
+3. **Freeze into files, not chat**, per `grilling/PLAN-FORMAT.md`:
+   - `SPEC.md` — the contract: goal and success criteria, scope and non-goals, numbered testable requirements, key decisions with their provenance, data/interface/credential changes, edge cases, spec corrections as they land.
+   - `PLAN.md` — ordered build phases, each small enough to verify alone, each with its acceptance check written as a command or observable behavior (`Done when: <check>`). Plus the **Assumptions Ledger** — every default adopted without asking, with its basis, blast radius, and the phase that checks it — and Risks & Landmines, where each discovered constraint names how the plan visibly adapted. Unknowns become named spike steps, not guesses.
    - `CONTEXT.md` + `docs/adr/` — terms and decisions, per `domain-modeling`.
-   - A **risk register** section in PLAN.md: the 3–5 riskiest assumptions, each with how you'd detect it failing early.
-3. **Offer a done-condition** the user can drive the whole build with ("complete PLAN.md build order; done when `npm run build` passes and tests are green").
-4. **Hard stop.** PLAN mode writes planning artifacts only — no scaffolding, no "small head start". End by offering the handoff: continue into BUILD here, or hand PLAN.md to `orchestrate` as a batch — and if it's the batch, propose the crew (see *Crew proposal*) so the plan ships with its model assignment settled.
+4. **Run both gates before handing it over** (`grilling/PLAN-FORMAT.md`): the completeness gate, including the provenance scan that demotes any "verified" whose source was memory rather than a file, command, or artifact read this session; and the executor gate — reread the plan as the stranger who will build from it, told only "execute this plan", and fix anywhere they would have to stop and ask.
+5. **Offer a done-condition** the user can drive the whole build with ("complete PLAN.md build order; done when `npm run build` passes and tests are green").
+6. **Hard stop.** PLAN mode writes planning artifacts only — no scaffolding, no "small head start". End by offering the handoff: continue into BUILD here, or hand PLAN.md to `orchestrate` as a batch — and if it's the batch, propose the crew (see *Crew proposal*) so the plan ships with its model assignment settled.
 
 ## KICKOFF — PLAN, then build
 
@@ -143,6 +144,8 @@ Transform tasks into verifiable goals: "add validation" → "write tests for inv
 - **Mega-prompt arrives (5+ asks in one message):** echo it back as a numbered checklist before working; report per-item DONE / NOT DONE / PARTIAL at the end — never silent omission. (Or hand the batch to `orchestrate`, which does this natively.)
 - **The user states a rule mid-session** ("X should always count as Y"): that's a spec correction — write it into `SPEC.md` (or `CONTEXT.md` if it's a term) IMMEDIATELY, and cite the file in your reply. The rule must survive context resets and future sessions.
 - **Never report "done" on behavior you haven't exercised.** Tests green ≠ done; drive the actual flow, and check the adjacent flows your change could regress.
+- **A fact you can't name a source for is an assumption, in every phase.** Versions come from the lockfile, API shapes from docs read or calls made this session, breaking changes from a changelog actually opened, timings from a measurement you took. Memory is never a source — state it as an assumption with what breaks if it's wrong, or go look. `grilling`'s evidence discipline is the full rule.
+- **Destructive or irreversible steps earn their own confirmation**, naming the irreversibility, plus a backup, dry run, or rollback in the plan — even when the ask sounded casual. Deletions, schema drops, force-pushes, anything touching production or real user data.
 - **Paid actions** (media-generation batches, paid APIs, deployments): state estimated cost and get confirmation before anything non-trivial.
 
 ## Harness notes

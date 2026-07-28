@@ -9,8 +9,8 @@ Cockpit ships seven interlocking process skills, and its marketplace also serves
 | Skill | Discipline |
 |---|---|
 | **pilot** | The flagship. Detects the project phase (PLAN / KICKOFF / BUILD / REVIEW / IMPROVE / DEBUG / DELIVER), enforces that phase's ritual, and routes to specialists. Ultra-planner mode produces SPEC + PLAN + risk register and stops before code; tiered review mode routes correctness/security/simplification/UX to the right reviewer; and before any fan-out it proposes the **crew** — which model runs which work — for your approval rather than choosing silently. Whatever model you've selected stays the lead and the designer; only mechanical work routes down and only adversarial review routes sideways. |
-| **grilling** | The brief-locking interview: one question at a time, recommended answer attached, until scope and non-goals are pinned. |
-| **grill-with-docs** | Grilling plus documentation — glossary terms into CONTEXT.md and ADRs as decisions land, PLAN.md at the end. |
+| **grilling** | The interview that turns an opening ask into a build-ready plan. Looks before it asks; one question per turn with a recommended answer you accept in a word; a visible budget capped at 14; every fact tagged as stated, verified, or assumed — with memory explicitly not a source. Ten work tracks set what each kind of job must decide, and two gates run before the plan is handed over, the last one rereading it as the stranger who has to execute it. |
+| **grill-with-docs** | Grilling plus documentation — glossary terms into CONTEXT.md and ADRs as decisions land, SPEC.md + PLAN.md at the end. |
 | **orchestrate** | Lead-dev mode for task batches: parse-and-echo every ask, route to subagents by difficulty, verify behaviorally, review with fresh eyes, report per-item — never silent omission. |
 | **handoff** | End-of-phase packaging: append-only project log, how-to-run guides, end-user manuals, final-delivery cleanup with list-first-delete-second. |
 | **diagnosing-bugs** | Repro-first debugging: build a tight red-capable feedback loop before any hypothesis, minimise, then fix with a regression test. |
@@ -70,7 +70,7 @@ Set up the "cockpit" process skills and the "maestro" design skill for me.
    <maestro-clone>/AGENTS.md."
 4. Verify: list the installed skills; cockpit ships 7 (pilot, grilling,
    grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling) and
-   maestro ships 1 skill with 19 reference modules plus a vendored library/ of
+   maestro ships 1 skill with 21 reference modules plus a vendored library/ of
    full source corpora.
 5. Tell me the entry points: /pilot for any project work (it detects the phase),
    /maestro or just asking for design/motion/video work, and that substantial
@@ -102,7 +102,7 @@ cockpit/
 
 ## Companions
 
-- **[maestro](https://github.com/leobbaroni/maestro)** — design, motion, 3D, and video: art direction, page anatomy (macrostructures, component fingerprints, themes), Design DNA, GSAP/Three.js/motion guidance, HyperFrames + Remotion video modules, a live-verified tool/library toolbox, and the same grill-first process — which asks *you* which design house leads. Ten upstream projects distilled into one voice over a vendored library of their full corpora, so their named protocols (audit, critique, redesign, study, polish, bolder, typeset, brand kit…) run for real. Installable from this marketplace.
+- **[maestro](https://github.com/leobbaroni/maestro)** — design, motion, 3D, and video: art direction, page anatomy (macrostructures, component fingerprints, themes), Design DNA, GSAP/Three.js/motion guidance, shot-card-led product video with HyperFrames and Remotion beneath it, a live-verified tool/library toolbox, and the same grill-first process — which asks *you* which design house leads. Eleven upstream projects distilled into one voice over a vendored library of their full corpora, so their named protocols (audit, critique, redesign, study, polish, bolder, typeset, brand kit…) run for real. Installable from this marketplace.
 - **Video stack (third-party, optional)** — maestro's README lists exact installs for the HyperFrames suite, Remotion scaffolding, and media tooling.
 
 ## License

@@ -8,5 +8,6 @@ If you're **working on this repo**:
 - In-pack skill references (the seven above) must resolve; references to outside skills (maestro, hyperframes, code-review, …) must be phrased as optional specialists with a fallback.
 - `AGENTS.md` is the Codex/other-harness router — keep its skill index in sync with `skills/` (names, triggers, paths) whenever a skill is added, renamed, or retriggered.
 - Keep skills terse and imperative. pilot is the flagship; changes to its phase table or routing table ripple into AGENTS.md and README.
+- `grilling` ships three files — `SKILL.md` (the interview discipline), `TRACKS.md` (the ten work tracks), `PLAN-FORMAT.md` (the plan skeleton, artifact mapping, gates, completion bar). pilot's PLAN phase, grill-with-docs, and orchestrate §3 all cite them by path: keep the section names in `PLAN-FORMAT.md` and the track names in `TRACKS.md` stable, or fix every citation in the same change.
 - Bump `.claude-plugin/plugin.json` version and add a `CHANGELOG.md` entry with every content change.
 - The `maestro` marketplace entry in `.claude-plugin/marketplace.json` points at `leobbaroni/maestro` — that repo versions itself; nothing to sync here.

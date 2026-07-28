@@ -56,6 +56,7 @@ Rules that carry the intent:
 - **Say what "done" is not.** Name the tempting-but-wrong finish ("do not also refactor the surrounding component", "do not add tests for unrelated paths") — scope creep in a subagent is invisible until review.
 - **Review prompts get the same treatment, aimed adversarially:** the specific claim to attack, what evidence would refute it, and an instruction to verify against the real file before reporting — never "review this code".
 - **Never assume shared vocabulary.** Project codenames, your own shorthand from earlier turns, and abbreviations you invented mean nothing to a cold agent. Spell them out once.
+- **When the batch came from a plan, mine it instead of paraphrasing it.** A plan written per `grilling`'s format was already written for a stranger, so it holds six of the seven blocks outright: the phase's `Done when:` is the acceptance criteria, its `Covers:` requirements are the objective, Out of Scope & Parked Items is the non-goals block, Key Decisions carry the reasoning behind the approach, and the Assumptions Ledger rows that phase checks are exactly what the agent must verify before building on them. Copy them across verbatim — re-deriving a thinner version from memory is how a locked brief silently loosens.
 
 Read the returned work against the prompt you actually wrote before accepting it. When an agent misses, check the prompt first — most misses are missing context, not a weak model, and re-running with a better prompt beats escalating a tier.
 

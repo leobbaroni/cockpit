@@ -1,5 +1,66 @@
 # Changelog
 
+## 1.3.0 — 2026-07-28
+
+**grilling rewritten from a 10-line prompt into the pack's planning engine**, merging a
+refined planning meta-prompt supplied by the author. It now ships three files: `SKILL.md`
+(the interview discipline), `TRACKS.md` (ten work tracks), `PLAN-FORMAT.md` (skeleton,
+artifact mapping, gates, completion bar).
+
+- **Evidence discipline.** Every factual sentence — in the interview and in the plan —
+  carries exactly one of `(user)` / `(verified: <source>)` / `[assumed: default X — if
+  wrong: Y]`. **Memory is never a source**: a version not read from a lockfile, an API
+  shape not read from docs this session, a changelog not actually opened, a timing not
+  measured — all `[assumed]`, and the completeness gate demotes any `(verified)` whose
+  source turns out to be a knowledge claim. This is the fix for the failure the pack had
+  no defence against: a plan that reads as authoritative and contains a fact nobody checked.
+- **A question contract with a visible budget.** One question per turn, always last, exactly
+  one question mark; every question ships a `Recommended:` line acceptable in one word with
+  a stated basis; a bare "yes" takes the recommendation, not the literal polarity. Turns open
+  with `Locked: … · Open forks: n · Q<k>/14`. Hard cap 14, target 3–8. A necessity test
+  gates every question — name the two plans the answer forks between, and if it's the same
+  plan either way, decide it and tag it instead.
+- **Four bins, one of which costs a question.** Settled (evidence answers it) · executor's
+  latitude (any competent choice serves) · default-and-tag (clear default, cheap to reverse)
+  · fork — which needs divergence *and* opacity *and* expensive-to-reverse cost, all three,
+  to earn a question.
+- **Ten tracks** (`TRACKS.md`), picked silently by end-state: bug fix, feature, from scratch,
+  refactor & hardening, integration, performance, migration, UI build, tech decision, quick
+  task. Each names its decisive slots, the sections it adds, its build-phase invariants
+  (reproduce first, measure first, safety net first, delete the old path last), and its
+  signature landmines. Ordered tie-breaks and silent re-routing when answers reveal a
+  different beast.
+- **Landmine falsifiers get reserved budget.** At least two questions spent on the sharpest
+  named falsifier — a question that states your approach and asks the one fact that would
+  kill it — early enough to still reshape the plan. A confirmed landmine must visibly change
+  the plan, not get patched in a sentence. Plus a danger rule: destructive or irreversible
+  steps earn their own confirmation and a rollback step, however casual the ask sounded.
+- **A mid-budget checkpoint** aimed at the assumption whose failure would most damage the
+  plan — the counterweight to agreement bias — and a coverage sweep before closing, where
+  every uncovered category becomes a stated tagged default rather than a silent omission.
+- **Two gates before handover**, fixed in the document and never by reopening the interview:
+  the completeness gate with its provenance scan, and the **executor gate** — reread the plan
+  as the stranger who will build from it, told only "execute this plan", and fix anywhere
+  they would have to stop and ask.
+- **The plan skeleton mapped onto cockpit's artifacts** rather than dumped into chat:
+  contract sections into `SPEC.md`, build sections into `PLAN.md`, terms and hard-to-reverse
+  choices into `CONTEXT.md` / `docs/adr/` per domain-modeling. New in `PLAN.md`: the
+  **Assumptions Ledger** (every default adopted without asking, with basis, blast radius, and
+  the phase that checks it) — which supersedes the old free-form risk register — and a
+  Build Phases contract (≤12 phases, each provable by its done-check, any phase depending on
+  an assumption verifies it in its first step).
+- **pilot's PLAN phase** rewritten around it: pick the track as well as the phase, freeze per
+  `PLAN-FORMAT.md`, run both gates before the handoff. Two new standing interceptors, live in
+  every phase: a fact you can't name a source for is an assumption, and destructive steps earn
+  their own confirmation.
+- **orchestrate §3** now mines a plan instead of paraphrasing it — a plan written for a
+  stranger already holds six of the seven delegation blocks (`Done when:` is the acceptance
+  criteria, `Covers:` the objective, Out of Scope the non-goals, Key Decisions the reasoning,
+  the Assumptions Ledger what the agent must verify first). Copy them verbatim; re-deriving
+  a thinner version from memory is how a locked brief silently loosens.
+- Marketplace/README: maestro is eleven upstreams and 21 reference modules now, with
+  video-shotcraft leading product video.
+
 ## 1.2.1 — 2026-07-20
 
 Adversarial-review fixes on 1.2.0.
