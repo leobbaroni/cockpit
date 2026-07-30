@@ -1,5 +1,47 @@
 # Changelog
 
+## 1.5.0 — 2026-07-30
+
+**pilot's coding discipline rewritten as the execution contract.** It was four principles
+derived from Karpathy's observations on LLM coding pitfalls — think before coding, simplicity
+first, surgical changes, goal-driven execution — and every model agrees with all four while
+following them selectively. The rewrite keeps the substance and changes what kind of thing it
+is: **triggers and artifacts instead of virtues**, because nobody experiences themselves as
+assuming, over-engineering, or drifting. You won't catch "I'm making an assumption"; you will
+catch "I just typed a filename I never opened."
+
+- **Named the real failure mode up front.** The strongest models fail these hardest — not from
+  carelessness but from competence: a capable model sees a better design, a missing edge case,
+  an adjacent flaw, and has a genuinely good reason to act. **The quality of the reason is not
+  evidence that it's in scope.**
+- **Gate 1 — restate the ask, then work.** One line in the user's own terms, naming what's out.
+  If you can't write it, you don't have the ask. That line is the scope contract; anything not
+  in it is a proposal. Four halt conditions replace "if uncertain, ask" — two readings that
+  produce different diffs, a request that contradicts the code, a file you'd guess at instead
+  of reading, or a change that breaks something unmentioned.
+- **Gate 2 — name what you'll touch, then touch only that.** Nine specific moves listed,
+  because that is what over-engineering looks like in a diff and each one is individually
+  defensible: a config parameter with one call site, a branch for an impossible case, a helper
+  extracted for a single use, an abstraction for one implementation, a fix to an adjacent nit,
+  a test for behavior you didn't change. **Noticing is not fixing** — name it, leave it.
+- **Gate 3 — the rationalization tripwire, new.** A deviation almost never arrives as "I'll
+  ignore the scope"; it arrives wearing a reason. Fourteen of them listed near-verbatim —
+  "while I'm here", "this will be needed later", "for robustness", "it's cleaner this way",
+  "the more general solution is actually simpler". When one shows up in your own reasoning,
+  that *is* the signal: ask, or write it down as a follow-up. Never proceed silently because
+  the argument was good — the argument is always good, which is why the failure survives.
+- **Gate 4 — done is a check you ran.** Paste the command and its output. Green typecheck,
+  passing build, and "this should work" are each named as not-done. If you can't state the
+  check, the task isn't specified — back to Gate 1. (This absorbs the old standing interceptor
+  on unexercised behavior, which said the same thing twice.)
+- **The exemption is narrow and defined against the obvious loophole:** trivial changes may run
+  the gates in your head, and **"trivial" is a property of the change, not of your confidence
+  in it** — a task you're sure about that touches four files is not trivial.
+- Cross-wired: Step 0 states that the phase decides the ritual while the contract decides how
+  any single edit is made, and BUILD routes into it by name. Attribution to the Karpathy source
+  kept in the section footer.
+- Marketplace: maestro is 3.5.0 with the new generative-media family.
+
 ## 1.4.0 — 2026-07-28
 
 **The question cap is gone.** 1.3.0 shipped a hard cap of 14 — an arbitrary constant that

@@ -8,7 +8,7 @@
     {
       "name": "cockpit",
       "source": "./",
-      "description": "The process pack: pilot (phase detection, ultra-planning, review routing), grilling (evidence-tagged interview → build-ready plan), grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling. Claude Code native, Codex via AGENTS.md."
+      "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (evidence-tagged interview → build-ready plan), grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling. Claude Code native, Codex via AGENTS.md."
     },
     {
       "name": "maestro",
@@ -16,7 +16,7 @@
         "source": "url",
         "url": "https://github.com/leobbaroni/maestro.git"
       },
-      "description": "Unified design, motion, 3D, and video super skill — eleven upstream knowledge bases (incl. taste-skill, hallmark, and video-shotcraft leading product video) distilled into one voice, with a vendored full-corpus depth library and a grill-first process."
+      "description": "Unified design, motion, 3D, and video super skill — eleven upstream knowledge bases (incl. taste-skill, hallmark, and video-shotcraft leading product video) distilled into one voice, plus a generative-media family for prompting image and video models. Vendored full-corpus depth library, grill-first process."
     }
   ]
 }

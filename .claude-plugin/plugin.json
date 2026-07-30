@@ -1,8 +1,8 @@
 {
   "name": "cockpit",
   "displayName": "Cockpit",
-  "version": "1.4.0",
-  "description": "The process pack: pilot (phase detection, ultra-planning, review routing), grilling (the evidence-tagged interview that turns an ask into a build-ready plan), grill-with-docs (grilling + live ADRs/glossary), orchestrate (multi-agent task batches), handoff (logs, guides, delivery), diagnosing-bugs (repro-first debugging), and domain-modeling (glossary + ADRs). Harness-neutral: Claude Code native, Codex via AGENTS.md.",
+  "version": "1.5.0",
+  "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (the evidence-tagged interview that turns an ask into a build-ready plan), grill-with-docs (grilling + live ADRs/glossary), orchestrate (multi-agent task batches), handoff (logs, guides, delivery), diagnosing-bugs (repro-first debugging), and domain-modeling (glossary + ADRs). Harness-neutral: Claude Code native, Codex via AGENTS.md.",
   "author": {
     "name": "leobbaroni",
     "email": "leobbaroni@gmail.com"
