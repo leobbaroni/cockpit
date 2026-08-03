@@ -2,7 +2,7 @@
 
 **The process pack for AI coding agents — planning, orchestration, review, debugging, and delivery as installable skills. Claude Code native; Codex-compatible via AGENTS.md.**
 
-Cockpit ships seven interlocking process skills, and its marketplace also serves [maestro](https://github.com/leobbaroni/maestro) — the companion design/motion/3D/video skill — so a single marketplace serves the complete stack (one add, two installs).
+Cockpit ships eight interlocking process skills and pulls in [maestro](https://github.com/leobbaroni/maestro) — the companion design/motion/3D/video skill — as a dependency, so **one install gets the complete stack**.
 
 ## What's inside
 
@@ -15,18 +15,22 @@ Cockpit ships seven interlocking process skills, and its marketplace also serves
 | **handoff** | End-of-phase packaging: append-only project log, how-to-run guides, end-user manuals, final-delivery cleanup with list-first-delete-second. |
 | **diagnosing-bugs** | Repro-first debugging: build a tight red-capable feedback loop before any hypothesis, minimise, then fix with a regression test. |
 | **domain-modeling** | The project's ubiquitous language: challenge fuzzy terms, maintain CONTEXT.md, record hard-to-reverse choices as ADRs. |
+| **setup** | What can this machine actually do? Detects installed plugins, companion skills, Node, and FFmpeg, reports each gap as the capability it costs you rather than a package name, and closes them in tiers — asking before each one, and never cloning a third-party repo without approval. |
 
 The skills reference each other by name and ship together, so every internal reference resolves. References to outside specialists (maestro, hyperframes, code-review, …) are optional: agents route to them when installed and fall back gracefully when not.
 
 ## Installation
 
-**Claude Code — the full stack in three commands (recommended)**
+**Claude Code — the full stack in two commands (recommended)**
 
 ```
 /plugin marketplace add leobbaroni/cockpit
 /plugin install cockpit@cockpit
-/plugin install maestro@cockpit
 ```
+
+**maestro comes with it.** cockpit declares it as a plugin dependency, so installing cockpit resolves and installs maestro automatically. Two consequences worth knowing: maestro can't be disabled on its own while cockpit is enabled (Claude Code refuses and prints a chained disable command), and every cockpit install carries maestro's ~5 MB depth library whether or not you do design work.
+
+Then run **`/setup`** — it checks what this machine can actually do (Node, FFmpeg, companion skills) and gives you the exact command for each gap. Nothing installs without your say-so.
 
 **Claude Code — personal or project skills (no plugin system)**
 
@@ -51,35 +55,30 @@ Read <path-to-clone>/AGENTS.md and follow its skill routing for process work.
 
 [AGENTS.md](AGENTS.md) carries the full skill index with triggers; each skill's "Harness notes" section covers the mechanics without Claude-specific tooling.
 
-**Agent-assisted setup** — paste this into any capable coding agent:
+**Agent-assisted setup** — for a harness with no plugin system, paste this into any capable coding agent:
 
 ```text
-Set up the "cockpit" process skills and the "maestro" design skill for me.
+Set up the "cockpit" process pack and its "maestro" companion for me.
 
-1. Detect my harness.
-2. Claude Code: tell me to run
-   "/plugin marketplace add leobbaroni/cockpit", then
-   "/plugin install cockpit@cockpit" and "/plugin install maestro@cockpit".
-   If plugins aren't available to me, instead clone
-   https://github.com/leobbaroni/cockpit and https://github.com/leobbaroni/maestro
-   and copy cockpit's skills/* plus maestro's skills/maestro into my skills
-   directory (~/.claude/skills/ on macOS/Linux, %USERPROFILE%\.claude\skills\ on Windows).
-3. Codex or another AGENTS.md harness: clone both repos and add to my global
+1. Detect my harness and tell me which path applies.
+2. Claude Code with plugins: I run "/plugin marketplace add leobbaroni/cockpit"
+   then "/plugin install cockpit@cockpit". maestro installs automatically as a
+   dependency — don't tell me to install it separately.
+3. Claude Code without plugins: clone https://github.com/leobbaroni/cockpit and
+   https://github.com/leobbaroni/maestro, then copy cockpit's skills/* plus
+   maestro's skills/maestro into my skills directory (~/.claude/skills/ on
+   macOS/Linux, %USERPROFILE%\.claude\skills\ on Windows).
+4. Codex or another AGENTS.md harness: clone both repos and add to my global
    AGENTS.md (~/.codex/AGENTS.md): "Read <cockpit-clone>/AGENTS.md and follow its
    skill routing for process work. For design/motion/video work, read
    <maestro-clone>/AGENTS.md."
-4. Verify: list the installed skills; cockpit ships 7 (pilot, grilling,
-   grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling) and
-   maestro ships 1 skill with 21 reference modules plus a vendored library/ of
-   full source corpora.
-5. Tell me the entry points: /pilot for any project work (it detects the phase),
-   /maestro or just asking for design/motion/video work, and that substantial
-   requests start with a short interview — that's by design, and one of its
-   questions is which design house should lead the look; that pick is mine.
-6. OPTIONAL (ask me first — third-party repos): for the full video stack, install
-   the HyperFrames suite per maestro's README dependency table
-   (github.com/leobbaroni/maestro#full-capabilities-engine-and-companion-dependencies):
-   Node ≥ 22 + FFmpeg, plus the hyperframes skills from github.com/heygen-com/hyperframes.
+5. Then load the "setup" skill and run it — it detects what this machine can
+   actually do and walks the remaining gaps. Everything below is its job, not
+   yours: don't install Node, FFmpeg, or any third-party skill on your own.
+6. Tell me the entry points: /pilot for any project work (it detects the phase),
+   /setup to check the install, /maestro or just asking for design, motion, or
+   video work. Substantial requests start with a short interview — that's by
+   design, and one of its questions is which design house leads the look.
 ```
 
 ## Usage
@@ -93,8 +92,8 @@ Set up the "cockpit" process skills and the "maestro" design skill for me.
 
 ```
 cockpit/
-├── .claude-plugin/          Plugin + marketplace manifests (serves cockpit AND maestro)
-├── skills/                  The seven process skills (one folder per skill)
+├── .claude-plugin/          Plugin + marketplace manifests (cockpit declares maestro as a dependency)
+├── skills/                  The eight process skills (one folder per skill)
 ├── AGENTS.md                Codex / non-Claude harness router with the skill index
 ├── CLAUDE.md                Contributor rules (harness-neutrality contract)
 └── LICENSE · CHANGELOG.md
@@ -107,4 +106,4 @@ cockpit/
 
 ## License
 
-MIT. The seven skills are original process material; maestro carries its own license and upstream attribution in its repo.
+MIT. The eight skills are original process material; maestro carries its own license and upstream attribution in its repo.

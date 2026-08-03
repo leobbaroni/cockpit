@@ -1,6 +1,6 @@
 # Cockpit — agent instructions
 
-This repository ships seven **process skills**: self-contained markdown instruction files under `skills/<name>/SKILL.md`. Each one is a discipline for a phase of software work. They are harness-neutral: written for any capable coding agent (Claude Code, Codex, or other AGENTS.md-compatible harnesses). Where mechanics differ per harness, the skill has a "Harness notes" section — follow the branch that matches yours, and ignore tool names your harness doesn't have.
+This repository ships eight **process skills**: self-contained markdown instruction files under `skills/<name>/SKILL.md`. Each one is a discipline for a phase of software work. They are harness-neutral: written for any capable coding agent (Claude Code, Codex, or other AGENTS.md-compatible harnesses). Where mechanics differ per harness, the skill has a "Harness notes" section — follow the branch that matches yours, and ignore tool names your harness doesn't have.
 
 ## The rule
 
@@ -17,12 +17,13 @@ When the user's request matches a trigger below, **open that skill file and foll
 | **handoff** | Change log, how-to-run guide, end-user manual, revert instructions, final-delivery cleanup | `skills/handoff/SKILL.md` |
 | **diagnosing-bugs** | "diagnose / debug this", something broken/throwing/failing/slow with unknown cause, a fix that "didn't take" | `skills/diagnosing-bugs/SKILL.md` |
 | **domain-modeling** | Pinning domain terminology, recording an architectural decision (ADR), maintaining CONTEXT.md | `skills/domain-modeling/SKILL.md` |
+| **setup** | "set up cockpit", "install the stack", "what's missing", "why can't it render video", or a fresh machine | `skills/setup/SKILL.md` |
 
-Skills reference each other by name (pilot routes to grilling, orchestrate, diagnosing-bugs, handoff, domain-modeling); all seven ship here, so every in-pack reference resolves. References to skills outside this pack (`maestro`, `hyperframes`, `media-use`, `graphify`, `agent-reach`, `deep-research`, `code-review`, `simplify`, `security-review`, `review`, `docx`) are **optional specialists**: route to them when installed, otherwise do the work directly to the same standard and say the specialist was absent.
+Skills reference each other by name (pilot routes to grilling, orchestrate, diagnosing-bugs, handoff, domain-modeling); all eight ship here, so every in-pack reference resolves. References to skills outside this pack (`maestro`, `hyperframes`, `media-use`, `graphify`, `agent-reach`, `deep-research`, `code-review`, `simplify`, `security-review`, `review`, `docx`) are **optional specialists**: route to them when installed, otherwise do the work directly to the same standard and say the specialist was absent.
 
 ## Companion: maestro
 
-Design, UI, motion, 3D, and video work routes to the **maestro** skill — a separate repo, [github.com/leobbaroni/maestro](https://github.com/leobbaroni/maestro), with its own AGENTS.md. Install it alongside cockpit (the README covers both harnesses).
+Design, UI, motion, 3D, and video work routes to the **maestro** skill — a separate repo, [github.com/leobbaroni/maestro](https://github.com/leobbaroni/maestro), with its own AGENTS.md. On Claude Code it installs automatically as a plugin dependency of cockpit; on other harnesses clone it alongside (the README covers both, and the `setup` skill checks the result).
 
 Two things to know when routing to it: its interview asks **the user** which design house should lead the look (structure-led / polish-led / craft-led / blend) — that pick is the user's, and it governs the rest of the project. And when a request names a design action (audit, critique, redesign, study a reference, polish, bolder, typeset, brand kit…), maestro's `commands` module maps it to the originating project's real protocol — run that, not an approximation of it.
 

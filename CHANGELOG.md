@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.6.0 — 2026-08-03
+
+**One install gets the whole stack, and a new `setup` skill tells you what that stack can
+actually do on your machine.**
+
+- **cockpit declares `dependencies: ["maestro"]`.** Installing cockpit now resolves and
+  installs maestro automatically — `/plugin install cockpit@cockpit` is the only command.
+  The two repos, version lines, licenses, and maestro's upstream-drift machinery all stay
+  separate, which a merge would have welded together: maestro shipped six minor versions in
+  thirteen days driven by *upstream* churn across eleven external projects, while cockpit
+  shipped five driven by its own design. Kept as a **bare string** rather than a version
+  constraint on purpose — constraints resolve against `{plugin}--v{version}` git tags on the
+  *marketplace* repo, and maestro is sourced from its own, so a constrained entry wouldn't
+  resolve. Noted in CLAUDE.md so nobody "improves" it later.
+- Two consequences documented rather than discovered: **maestro can no longer be disabled on
+  its own** while cockpit is enabled (Claude Code refuses and prints a chained disable
+  command), and every cockpit install now carries maestro's ~5 MB depth library.
+- **New skill: `setup`.** Answers "what can this machine actually do?" — detects installed
+  plugins, companion skills, Node, and FFmpeg by *running the checks*, then reports each gap
+  as the capability it costs you rather than as a missing package name ("FFmpeg not on PATH:
+  HyperFrames can compose and check a video but cannot encode one"). Closes gaps in four
+  tiers — the pack, runtime prerequisites, companion skills, and the two source corpora
+  maestro cannot bundle — **asking before each tier**, never cloning a third-party repo on
+  blanket approval, and re-verifying with the detection command rather than trusting an
+  installer's exit code. Its standing rule: a tool you "know" is installed is an assumption.
+- The two corpora that can't ship inside maestro are now surfaced at install time instead of
+  being buried: **threejs-skills** (upstream declares no license) and genjutsu's
+  **ui-ux-pro-max** (1.7 MB of Python tooling). Previously nothing told you they existed.
+- README's agent-assisted setup prompt rewritten — it no longer tells agents to install
+  maestro separately, and it now hands the environment work to the `setup` skill instead of
+  having a context-free agent guess at your machine.
+- Marketplace manifest gained the description it was missing; `claude plugin validate` is
+  clean.
+
 ## 1.5.0 — 2026-07-30
 
 **pilot's coding discipline rewritten as the execution contract.** It was four principles

@@ -4,11 +4,12 @@
     "name": "leobbaroni",
     "email": "leobbaroni@gmail.com"
   },
+  "description": "Process discipline and design craft for AI coding agents. Install cockpit and maestro comes with it.",
   "plugins": [
     {
       "name": "cockpit",
       "source": "./",
-      "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (evidence-tagged interview → build-ready plan), grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling. Claude Code native, Codex via AGENTS.md."
+      "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (evidence-tagged interview → build-ready plan), grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling, setup. Installs maestro as a dependency — one command gets the whole stack. Claude Code native, Codex via AGENTS.md."
     },
     {
       "name": "maestro",
