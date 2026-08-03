@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.6.4 — 2026-08-03
+
+**Verified against the installed plugin instead of the catalog, and it did not match.** 1.6.3
+described the HyperFrames suite from Anthropic's plugin-catalog listing. Installing it and
+counting told a different story, so this release corrects the numbers, adds the two detections
+that would have caught the mismatch, and answers the question the guide never did: what a new
+user actually *types* once it is installed.
+
+- **19 skills, not 21.** The installed build (0.7.64) has no `hyperframes-media` — it does not
+  exist — and **`website-to-video` is a documentation guide there, not a skill**. Only upstream's
+  `npx skills add` route ships it. maestro's `companions.md` listed it as a routable workflow;
+  it is now marked conditional, with the fallback for when it is absent, so the router cannot
+  send work to a name that will not resolve.
+- **~2,540 always-on tokens, not ~4,850 — about 2.4× cockpit and maestro (~1,070), not five.**
+  Measured by summing each installed skill's frontmatter description. The old figure would have
+  talked people out of an install that is cheaper than advertised, which is the wrong kind of
+  wrong. The method is now written down next to the number so it can be re-measured rather than
+  quoted forever.
+- **`setup` detects shadowing.** Hand-installed skills plus a later plugin install leaves two
+  copies of every shared name, the hand-installed ones frozen forever, and no way for the user
+  to know which answers. The skill now diffs directory against directory and classifies each as
+  identical, plugin-superset, or **local-has-files-the-plugin-lacks** — the third being why this
+  is a diff and not an `rm -rf`. It also checks both locations when reporting what is installed;
+  reading only one is how a present skill gets reported missing.
+- **`setup update` mode, and a *Keeping it current* section.** Three layers, three different
+  update mechanisms, none automatic. Both now lead with the step people skip: refresh the
+  marketplace *before* `plugin update`, or the update is a no-op that reports success.
+- **INSTALL.md now covers using it, not just installing it.** A near-zero-knowledge user gets
+  one command to remember (`/cockpit:pilot`), a three-step first session that proves the install
+  works, a what-to-type table, the three deliberate behaviors that read as malfunctions
+  (interview-before-code, no-unverified-done, being asked which design house leads), and
+  explicit permission to say "skip the interview" — the process is a default, not a cage.
+
 ## 1.6.3 — 2026-08-03
 
 **A guide, and a `setup` that can actually close the gaps it finds.** 1.6.2 documented that the
@@ -13,15 +46,15 @@ with commands verified against a real machine rather than recalled.
   qualified `name@marketplace` form, the ≤ 1.5.0 dependency trap, Windows `MAX_PATH`, and
   hand-copied skills shadowing the plugin.
 - **The HyperFrames suite is one command, from the official marketplace.**
-  `/plugin install hyperframes@claude-plugins-official` installs 21 skills — the router, the
-  seven domain skills, eleven workflow skills, **and `media-use` and `figma`, which ship inside
-  it**. Both this repo and maestro previously implied hand-copying a `skills/` folder and
-  hunting for `media-use` separately. Neither was necessary.
-- **`setup` now states the context bill before recommending the suite.** 21 descriptions is
-  ~4,850 always-on tokens, roughly five times cockpit and maestro combined, because always-on
-  cost scales with the number of skills rather than their size. Right trade for someone who
-  renders video, pure loss for someone who doesn't — the skill makes the user decide knowingly
-  instead of recommending by default.
+  `/plugin install hyperframes@claude-plugins-official` installs the router, six domain skills,
+  ten workflow skills, **and `media-use` and `figma`, which ship inside it**. Both this repo and
+  maestro previously implied hand-copying a `skills/` folder and hunting for `media-use`
+  separately. Neither was necessary. *(Counts and token figures in this entry were corrected in
+  1.6.4 after measuring the installed plugin rather than the catalog listing.)*
+- **`setup` now states the context bill before recommending the suite**, because always-on cost
+  scales with the number of skills rather than their size. Right trade for someone who renders
+  video, pure loss for someone who doesn't — the skill makes the user decide knowingly instead
+  of recommending by default.
 
 ## 1.6.2 — 2026-08-03
 

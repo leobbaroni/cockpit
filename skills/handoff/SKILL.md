@@ -34,7 +34,7 @@ A polished end-user manual: how to use the app, maintain it, and troubleshoot �
 
 Promo, demo, teaser, and product-film videos are NOT a handoff mode. Two animated-video toolchains may be installed; choose per the job (or combine them), don't hand-roll a bespoke pipeline:
 
-- **HyperFrames** (`/hyperframes`) — renders video from animated HTML/GSAP; routes to its own workflows (product-launch-video, general-video, motion-graphics, website-to-video, etc.). Strong for bespoke UI-recreation promos, a linted check/snapshot/render loop, and template-driven product launches. Needs Node ≥ 22 and a standalone ffmpeg on PATH.
+- **HyperFrames** (`/hyperframes`) — renders video from animated HTML/GSAP; routes to its own workflows (product-launch-video, general-video, motion-graphics, embedded-captions, etc.). Strong for bespoke UI-recreation promos, a linted check/snapshot/render loop, and template-driven product launches. Needs Node ≥ 22 and a standalone ffmpeg on PATH.
 - **Remotion** (maestro's `video-remotion` module) — React/TSX compositions rendered to MP4 via `remotion render`. Strong when you already have React components, want frame-precise programmatic control, or reuse an existing Remotion project; it bundles its own encoder (no external ffmpeg).
 
 Decide from the starting asset and the look you want; you may use both in combination. When unsure, read `/hyperframes` (its router also covers when a specialized workflow fits) and pick from there. If neither toolchain is installed, say so and point at maestro's README dependency table rather than improvising a pipeline.

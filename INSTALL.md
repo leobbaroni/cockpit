@@ -127,11 +127,21 @@ It is in Anthropic's official marketplace, so it installs the same way cockpit d
 /plugin install hyperframes@claude-plugins-official
 ```
 
-That is 21 skills in one command — the `/hyperframes` router, the domain skills
-(`-core`, `-animation`, `-keyframes`, `-creative`, `-cli`, `-registry`, `-media`), the workflow
-skills (`product-launch-video`, `faceless-explainer`, `pr-to-video`, `embedded-captions`,
-`talking-head-recut`, `motion-graphics`, `music-to-video`, `slideshow`, `general-video`,
-`website-to-video`, `remotion-to-hyperframes`), plus **`media-use`** and **`figma`**.
+That is **19 skills in one command**, verified against the installed plugin at 0.7.64 rather
+than against a catalog listing:
+
+- **Router** — `hyperframes`. Read first for any video request; it picks the workflow.
+- **Domain (6)** — `hyperframes-core`, `-animation`, `-keyframes`, `-creative`, `-cli`,
+  `-registry`.
+- **Workflows (10)** — `product-launch-video`, `faceless-explainer`, `pr-to-video`,
+  `embedded-captions`, `talking-head-recut`, `motion-graphics`, `music-to-video`, `slideshow`,
+  `general-video`, `remotion-to-hyperframes`.
+- **Companions (2)** — `media-use` and `figma`.
+
+`website-to-video` is **not** among them. It exists in the plugin as a documentation guide
+(`docs/guides/website-to-video.mdx`), not as an installable skill — so a routing table that
+names it will find nothing. Upstream's `npx skills add` route does ship it as a skill; that is
+the one capability the plugin path does not carry.
 
 If the official marketplace is not configured:
 
@@ -180,15 +190,49 @@ behind a distilled module:
 Skill *descriptions* sit in context from the moment a skill is enabled; skill *bodies* load
 only when invoked, and a vendored `library/` file costs nothing until something reads it.
 
-| Installed | Always in context | Loaded on invoke |
-|---|---|---|
-| cockpit + maestro | ~900 tokens (9 descriptions) | Per skill, on demand |
-| hyperframes suite | ~4,850 tokens (21 descriptions) | ~123,000 tokens across the suite |
+Measured by summing each skill's frontmatter description (the part that is always resident),
+against the actually-installed builds — cockpit 1.6.x, maestro 3.6.x, hyperframes 0.7.64:
 
-Worth sitting with: **the hyperframes suite costs roughly five times cockpit and maestro
-combined**, permanently, in every session — because always-on cost scales with the *number* of
-skills, not their size. maestro's 5 MB library is free until read. If you do not render video,
-not installing the suite is a real saving, and if you do, it is worth every token.
+| Installed | Skills | Always in context |
+|---|---|---|
+| cockpit | 8 | ~890 tokens |
+| maestro | 1 | ~180 tokens |
+| **cockpit + maestro** | **9** | **~1,070 tokens** |
+| hyperframes suite | 19 | ~2,540 tokens |
+
+**The hyperframes suite costs about 2.4× cockpit and maestro combined**, permanently, in every
+session — because always-on cost scales with the *number* of skills, not their size. That is
+why maestro is one skill with 24 reference modules rather than 24 skills: its 5 MB library and
+every module in it are free until something reads them.
+
+Numbers move between releases, and Anthropic's plugin catalog reports a higher figure for a
+newer 21-skill hyperframes build than the 19-skill one measured here. Treat the ratio as the
+durable part: a video suite is a couple of thousand always-on tokens, worth it if you render
+video and a pure loss if you don't.
+
+## Keeping it current
+
+Nothing here updates itself. Each layer has its own mechanism, and `/cockpit:setup update` walks
+all of them:
+
+| Layer | Command |
+|---|---|
+| cockpit + maestro | `claude plugin marketplace update cockpit`, then `claude plugin update cockpit@cockpit` and `claude plugin update maestro@cockpit` |
+| hyperframes suite | `claude plugin marketplace update claude-plugins-official`, then `claude plugin update hyperframes@claude-plugins-official` |
+| Remotion, per project | `npx remotion upgrade` — updates the library **and** its bundled skills together |
+
+**Refresh the marketplace first, every time.** `plugin update` compares against your local clone
+of the marketplace listing, so skipping the refresh gives you a no-op that reports success. The
+pair, in that order, is the whole trick.
+
+Then `/reload-plugins`, since updates print *restart required to apply*. Confirm with
+`claude plugin list` that the version column actually moved — an update that silently did
+nothing looks identical to one that worked.
+
+**maestro moves faster than cockpit, by design.** It tracks eleven upstream projects through a
+pinned-commit drift checker and a weekly job that files an issue when a source repository
+changes, so its version climbs on someone else's release schedule rather than its own. "I
+updated last week" is not a reason to skip it.
 
 ## Non-Claude harnesses
 
@@ -242,17 +286,12 @@ git config --global core.longpaths true
 ```
 
 **Skills appear twice, or the wrong version answers.**
-You have hand-copied skills in `~/.claude/skills/` shadowing the plugin's. Delete the personal
-copies; the plugin is the maintained one and updates with `claude plugin update`.
-
-**Updating.**
-
-```bash
-claude plugin marketplace update cockpit && claude plugin update cockpit@cockpit
-```
-
-Updates print *restart required to apply* — the running session keeps the old skill bodies
-until you reload or restart.
+You have hand-installed skills in `~/.claude/skills/` shadowing a plugin's copies of the same
+names — the normal result of installing by hand first and by plugin later. The plugin is the
+maintained one; the hand-installed copies will never update. **Diff before deleting anything**:
+distribution routes differ, and a name present locally but absent from the plugin (as
+`website-to-video` is) must be kept. `/cockpit:setup` does this comparison for you and lists
+what it would remove before removing it.
 
 **Uninstalling.**
 
@@ -263,10 +302,62 @@ claude plugin uninstall cockpit@cockpit && claude plugin prune
 `prune` removes maestro once nothing depends on it. Removing maestro first will be refused
 while cockpit is enabled.
 
-## After the install
+## Using it — start here if you've never used a skill
 
-`/cockpit:pilot` is the entry point for any ongoing or new project — it detects the phase and
-enforces that phase's ritual. Two behaviors are intentional and are not the tool being
-difficult: **substantial work opens with an interview** rather than with code, and **nothing is
-reported done unverified**. One of the interview's questions is which design house leads the
-look; that pick is yours, and it governs the rest of the project.
+You do not need to learn nineteen commands. **You need one**, and the rest is the agent's job
+to route to:
+
+```
+/cockpit:pilot
+```
+
+Type it with whatever you want to do after it — `/cockpit:pilot add dark mode to the settings
+page`, or nothing at all if you just want to know where the project stands. Pilot reads the
+repo, works out which phase you're in (planning, building, reviewing, fixing, shipping), and
+runs the discipline that phase needs. **If you remember nothing else from this document,
+remember that.**
+
+You can also just describe what you want in plain English. Skills are picked up automatically
+when their description matches — "make this page look better" reaches maestro, "why is this
+throwing" reaches the debugging skill, "render a 30-second promo" reaches the video router. The
+slash commands are for when you want to force a specific one.
+
+### Three behaviors that surprise people
+
+These are deliberate. They are not the tool malfunctioning:
+
+- **Substantial work opens with an interview, not with code.** One question per turn, each with
+  a recommended answer you can accept in a word. It ends with written plan files. Twenty
+  minutes here routinely saves days, and small well-specified tasks skip it entirely.
+- **Nothing is reported done without a check that was actually run.** A green typecheck is not
+  "done"; the flow gets driven, the UI gets looked at.
+- **You get asked which design house leads the look.** Structure-led, polish-led, craft-led, or
+  a blend — it governs every design decision afterwards, so it is yours to pick rather than the
+  agent's to assume.
+
+### A first session that proves it works
+
+1. Open a project — any project, even an empty folder.
+2. `/cockpit:pilot` with no arguments. It should report the phase and a concrete next action.
+3. `/cockpit:setup`. It should report Node, FFmpeg, and which companion skills it can reach.
+
+If both of those produce sensible output, the install is good.
+
+### What to type for what you want
+
+| You want | Say |
+|---|---|
+| Anything, on an ongoing project | `/cockpit:pilot` |
+| A plan before any code | `/cockpit:pilot plan this properly` |
+| Design, UI, motion, or 3D work | `/maestro:maestro`, or just describe the design change |
+| A video | Describe it — the video router picks the workflow |
+| Something is broken | `/cockpit:diagnosing-bugs`, or describe the failure |
+| A review before merging | `/cockpit:pilot review this` |
+| Docs, a handover, or delivery cleanup | `/cockpit:handoff` |
+| To know what this machine can do | `/cockpit:setup` |
+
+### If it feels like it's doing too much
+
+Say so, plainly, mid-run — "skip the interview", "just make the change", "don't refactor
+anything else". The process is a default, not a cage, and an explicit instruction from you
+outranks every ritual described above.

@@ -8,7 +8,7 @@ argument-hint: "[check | fix | full]"
 
 Report what this stack can and cannot do **on this machine**, then close the gaps with consent. Never guess at the environment — every line of the report comes from a command you ran this session.
 
-Modes: `check` (detect and report, change nothing — the default) · `fix` (report, then offer each gap in order) · `full` (report, then walk every tier including the optional third-party ones).
+Modes: `check` (detect and report, change nothing — the default) · `fix` (report, then offer each gap in order) · `full` (report, then walk every tier including the optional third-party ones) · `update` (refresh everything already installed — see [Step 4](#step-4--keep-it-current)).
 
 The written companion to this skill is **[INSTALL.md](../../INSTALL.md)** in the cockpit repo — the same tiers, the same commands, plus a troubleshooting section covering every failure this install path is known to produce. Point users there when they want to read ahead, when they are setting up a machine without an agent session to run this in, or when they hit a symptom in that list.
 
@@ -21,10 +21,32 @@ Run these and read the output. Missing tools are a normal result, not an error t
 | The pack itself | `claude plugin list` | Both `cockpit` and `maestro` present, enabled, and on the versions you expect |
 | Node | `node --version` | **≥ 22** is the floor for the video toolchain |
 | FFmpeg | `command -v ffmpeg` (`Get-Command ffmpeg` in PowerShell) | Must be a standalone binary on `PATH`. A bundled encoder inside a library does not satisfy this. **Test for the binary, not its output** — `ffmpeg -version \| head -1` prints nothing when the command is missing, which reads as a blank cell rather than a failure |
-| Companion skills | list the skills directory (`~/.claude/skills/` on macOS/Linux, `%USERPROFILE%\.claude\skills\` on Windows) plus any plugin-provided ones | Which specialists the routing tables can actually reach |
+| Companion skills | list the skills directory (`~/.claude/skills/` on macOS/Linux, `%USERPROFILE%\.claude\skills\` on Windows) **and** the plugin cache (`~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/skills/`) | Which specialists the routing tables can actually reach. Check both — a skill can arrive either way, and reporting only one location is how you get a false "missing" |
+| **Shadowing** | any name appearing in *both* locations | See below. This is the most common broken state on a machine that has been set up more than once |
 | Remotion, if a project exists | `npx remotion versions` | Version-gated APIs depend on this, and the CLI self-updates its own skills |
 
 On harnesses without `claude`, read the plugin cache directory directly, or ask the user to paste their installed-skill list.
+
+### Shadowing — hand-installed copies competing with a plugin
+
+A user who installed skills by hand (`npx skills add …`, or copying a `skills/` folder) and
+*later* installed the plugin that provides the same skills now has two copies of each. The
+hand-installed ones never update, and which one answers is not something they chose.
+
+Resolve it by evidence, never by assumption:
+
+1. **Diff every shared name**, directory against directory. Do not compare version strings —
+   these skills mostly do not carry one.
+2. **Classify each**: identical · plugin is a superset · **local has files the plugin lacks**.
+   That third case is the only one that matters, and it is why this is a diff and not a
+   `rm -rf`. A local-only file means deleting would destroy a capability.
+3. **Check for local-only *skills*, not just files.** Distribution routes differ — the
+   hyperframes plugin ships 19 skills while upstream's `npx skills add` ships one more. A name
+   present locally and absent from the plugin must be kept.
+4. **Back up, then remove only the proven-redundant ones**, and list what you kept and why.
+
+Once resolved, the plugin is the maintained copy: it updates with `claude plugin update`, and
+a hand-installed skill never will.
 
 ## Step 2 — Report gaps as capability, not as inventory
 
@@ -80,14 +102,22 @@ A clean machine has **none** of these — Tier 0 installs cockpit and maestro an
 
 | Skill | Unlocks | Install |
 |---|---|---|
-| **hyperframes** suite — 21 skills | HTML-to-video authoring, the lint/check/snapshot/render loop, every specialized workflow (product launch, explainer, captions, motion graphics, slideshow, website-to-video), **and `media-use` and `figma`, which ship inside it** | `/plugin install hyperframes@claude-plugins-official` — it is in Anthropic's official marketplace, so it installs exactly like cockpit. Add the marketplace first if needed: `/plugin marketplace add anthropics/claude-plugins-official`. Outside the plugin system: `npx skills add heygen-com/hyperframes --full-depth` |
+| **hyperframes** suite — 19 skills | HTML-to-video authoring, the lint/check/snapshot/render loop, every specialized workflow (product launch, explainer, captions, motion graphics, slideshow), **and `media-use` and `figma`, which ship inside it** | `/plugin install hyperframes@claude-plugins-official` — it is in Anthropic's official marketplace, so it installs exactly like cockpit. Add the marketplace first if needed: `/plugin marketplace add anthropics/claude-plugins-official`. Outside the plugin system: `npx skills add heygen-com/hyperframes --full-depth`, which ships one extra skill (below) |
 | **media-use** | Resolving music, SFX, images, icons, logos, voiceover, captions, grades, and LUTs to real files instead of improvising them | **No separate install** — it ships inside the hyperframes suite above. Do not send the user hunting for it |
 | **Remotion** | React-to-video, frame-exact programmatic control, and shotcraft's template mode | `npx create-video@latest --yes --blank --no-tailwind my-video && cd my-video && npm i`, per project. `npx remotion upgrade` keeps the library and its bundled skills current |
 
-**State the context cost before installing the suite.** Its 21 descriptions sit in every session
-at roughly 4,850 tokens — about five times cockpit and maestro combined — because always-on cost
-scales with the *number* of skills, not their size. That is a fine trade for someone who renders
-video and a pure loss for someone who does not. Let the user make it knowingly.
+**`website-to-video` is not in the plugin.** It exists there as a documentation guide, not an
+installable skill, so any routing table naming it will find nothing. Only the `npx skills add`
+route ships it. If a user needs website capture specifically, say this plainly rather than
+sending them to a command that will not resolve.
+
+**State the context cost before installing the suite.** Measured on hyperframes 0.7.64: 19
+descriptions, ~2,540 always-on tokens, against ~1,070 for cockpit and maestro together — about
+2.4×. Always-on cost scales with the *number* of skills, not their size, which is why maestro
+is one skill with 24 modules rather than 24 skills. That is a fine trade for someone who renders
+video and a pure loss for someone who does not. Let the user make it knowingly, and re-measure
+rather than quoting these figures forever — sum each installed `SKILL.md`'s frontmatter
+description, since that is the part that stays resident.
 
 ### Tier 3 — source corpora maestro cannot bundle
 
@@ -97,6 +127,33 @@ Only surface these when the user asks for depth maestro doesn't ship. Both are d
 - **genjutsu's `ui-ux-pro-max`** (`github.com/AThevon/genjutsu`) — 1.7 MB of Python tooling and CSV data, excluded for size and its Python dependency. The other 14 sub-skills plus the `cast` and `paint` orchestrators are already vendored.
 
 Everything else each upstream ships is vendored in maestro's `library/` and needs no install.
+
+## Step 4 — Keep it current
+
+A stack that installs correctly once and then rots is not set up. Each layer updates by a
+different mechanism, and none of them are automatic:
+
+| Layer | Command | Cadence |
+|---|---|---|
+| cockpit + maestro | `claude plugin marketplace update cockpit` then `claude plugin update cockpit@cockpit` and `claude plugin update maestro@cockpit` | When you want fixes. maestro moves fastest — it tracks eleven upstream projects |
+| hyperframes suite | `claude plugin marketplace update claude-plugins-official` then `claude plugin update hyperframes@claude-plugins-official` | Ships often |
+| Remotion, per project | `npx remotion upgrade` | Before a build, not after one breaks — it updates the library *and* its bundled skills together |
+| FFmpeg, Node | your package manager | Rarely; only when a toolchain asks for a newer floor |
+
+**The marketplace refresh is the step people skip.** `plugin update` compares against your local
+clone of the marketplace, so without refreshing it first the update is a no-op that reports
+success. Run the pair, in that order, always.
+
+Two more facts worth stating rather than rediscovering: `update` and `enable` need the qualified
+`name@marketplace` form (a bare `claude plugin update cockpit` fails with `Plugin not found`),
+and every update prints *restart required to apply* — the running session keeps the old skill
+bodies until `/reload-plugins` or a restart. Verify afterwards with `claude plugin list` and
+check the version column actually moved.
+
+**maestro tracks its own sources.** It carries `upstreams.json` with a pinned commit per watched
+path, a drift checker, and a weekly job that opens an issue when an upstream moves. Nothing for
+the user to run — but it is why maestro's version climbs faster than cockpit's, and why
+"already updated last week" is not a reason to skip it.
 
 ## Rules
 

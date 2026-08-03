@@ -48,7 +48,7 @@ Setup checks what this machine can actually do and gives you the exact command f
 | Node ≥ 22, FFmpeg on PATH | ❌ your machine's job |
 | hyperframes suite, media-use, Remotion | ❌ separate installs |
 
-The second group is what `setup` exists to find. It reports each gap as the capability it costs you and hands you the command — it does not install anything without your say-so. The whole video toolchain is one further command, `/plugin install hyperframes@claude-plugins-official`, and [INSTALL.md](INSTALL.md) covers when it's worth it: 21 skills is ~4,850 always-on tokens, roughly five times cockpit and maestro combined.
+The second group is what `setup` exists to find. It reports each gap as the capability it costs you and hands you the command — it does not install anything without your say-so. The whole video toolchain is one further command, `/plugin install hyperframes@claude-plugins-official`, and [INSTALL.md](INSTALL.md) covers when it's worth it: 19 skills at ~2,540 always-on tokens, about 2.4× cockpit and maestro combined (~1,070).
 
 **Claude Code — personal or project skills (no plugin system)**
 
