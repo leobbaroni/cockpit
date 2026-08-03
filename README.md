@@ -21,16 +21,30 @@ The skills reference each other by name and ship together, so every internal ref
 
 ## Installation
 
-**Claude Code — the full stack in two commands (recommended)**
+**Claude Code — the full stack in three commands (recommended)**
 
 ```
 /plugin marketplace add leobbaroni/cockpit
 /plugin install cockpit@cockpit
+/reload-plugins
 ```
 
-**maestro comes with it.** cockpit declares it as a plugin dependency, so installing cockpit resolves and installs maestro automatically. Two consequences worth knowing: maestro can't be disabled on its own while cockpit is enabled (Claude Code refuses and prints a chained disable command), and every cockpit install carries maestro's ~5 MB depth library whether or not you do design work.
+**maestro comes with it.** cockpit declares it as a plugin dependency, so installing cockpit resolves and installs maestro automatically — the install prints `+ 1 dependency: maestro`. Two consequences worth knowing: maestro can't be disabled on its own while cockpit is enabled (Claude Code refuses and prints a chained disable command), and every cockpit install carries maestro's ~5 MB depth library whether or not you do design work.
 
-Then run **`/setup`** — it checks what this machine can actually do (Node, FFmpeg, companion skills) and gives you the exact command for each gap. Nothing installs without your say-so.
+**`/reload-plugins` is not optional when you install mid-session.** Claude Code live-detects edits under `~/.claude/skills/`, but *not* plugin installs — until you reload (or restart), none of the new commands exist and none of them autocomplete. "The command isn't there" almost always means this.
+
+Then run **`/cockpit:setup`**. Plugin skills are namespaced by their plugin, so `/cockpit:setup`, `/cockpit:pilot`, and `/maestro:maestro` are the names that autocomplete; the bare `/setup`, `/pilot`, `/maestro` also work unless another installed command already claims that name.
+
+Setup checks what this machine can actually do and gives you the exact command for each gap. Be clear on what the two install commands did and did not do:
+
+| | Comes with `/plugin install cockpit@cockpit` |
+|---|---|
+| cockpit's eight process skills | ✅ automatic |
+| maestro, including its ~5 MB vendored library | ✅ automatic, as a dependency |
+| Node ≥ 22, FFmpeg on PATH | ❌ your machine's job |
+| hyperframes suite, media-use, Remotion | ❌ separate installs |
+
+The second group is what `setup` exists to find. It reports each gap as the capability it costs you and hands you the command — it does not install anything without your say-so.
 
 **Claude Code — personal or project skills (no plugin system)**
 
@@ -72,13 +86,18 @@ Set up the "cockpit" process pack and its "maestro" companion for me.
    AGENTS.md (~/.codex/AGENTS.md): "Read <cockpit-clone>/AGENTS.md and follow its
    skill routing for process work. For design/motion/video work, read
    <maestro-clone>/AGENTS.md."
-5. Then load the "setup" skill and run it — it detects what this machine can
+5. If I installed via plugins, tell me to run /reload-plugins (or restart) before
+   looking for the new commands — plugin skills are not live-detected, so they
+   simply will not exist in a session that started before the install.
+6. Then load the "setup" skill and run it — it detects what this machine can
    actually do and walks the remaining gaps. Everything below is its job, not
    yours: don't install Node, FFmpeg, or any third-party skill on your own.
-6. Tell me the entry points: /pilot for any project work (it detects the phase),
-   /setup to check the install, /maestro or just asking for design, motion, or
-   video work. Substantial requests start with a short interview — that's by
-   design, and one of its questions is which design house leads the look.
+7. Tell me the entry points: /cockpit:pilot for any project work (it detects the
+   phase), /cockpit:setup to check the install, /maestro:maestro or just asking
+   for design, motion, or video work. Plugin skills are namespaced by plugin;
+   the bare names work too unless something else claims them. Substantial
+   requests start with a short interview — that's by design, and one of its
+   questions is which design house leads the look.
 ```
 
 ## Usage

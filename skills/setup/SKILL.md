@@ -42,11 +42,18 @@ Ask before each tier. Never install anything from a third-party source without e
 ```
 /plugin marketplace add leobbaroni/cockpit
 /plugin install cockpit@cockpit
+/reload-plugins
 ```
 
-**maestro installs automatically** — cockpit declares it as a dependency, so one install brings both. Two consequences worth stating when they come up: maestro cannot be disabled on its own while cockpit is enabled (Claude Code refuses and prints a chained disable command), and cockpit carries maestro's ~5 MB library whether or not the user does design work.
+**maestro installs automatically** — cockpit declares it as a dependency, so one install brings both, and the install prints `+ 1 dependency: maestro`. Two consequences worth stating when they come up: maestro cannot be disabled on its own while cockpit is enabled (Claude Code refuses and prints a chained disable command), and cockpit carries maestro's ~5 MB library whether or not the user does design work.
 
-If maestro is somehow missing, `/reload-plugins` or re-running the install resolves it, provided the marketplace is still configured.
+**A skill installed mid-session does not exist until `/reload-plugins`.** Claude Code live-detects edits under `~/.claude/skills/` and a project's `.claude/skills/`, but a plugin install is invisible to that watcher. When the user reports "the command isn't there" or "no command shows up", this is the first thing to check and usually the whole answer — reload or restart, then look again. Nothing is wrong with the install.
+
+**Plugin skills are namespaced by their plugin.** `/cockpit:setup`, `/cockpit:pilot`, `/maestro:maestro` are what autocomplete; the bare `/setup`, `/pilot`, `/maestro` also resolve unless another installed command already claims that name. Give the namespaced form when telling a user what to type — it is the one that cannot collide.
+
+If maestro is somehow missing, re-running the install resolves it, provided the marketplace is still configured.
+
+**On a genuinely clean machine this tier is verified to work in one command.** A fresh config dir with only the marketplace added, then `claude plugin install cockpit@cockpit`, yields cockpit and maestro both `✔ enabled` with the full tree — all eight process skills and all ten vendored corpora. Do not send a new user to install maestro separately; that is the path that creates the mess below.
 
 **Updating from a version before the dependency existed** (cockpit ≤ 1.5.0, where maestro was installed separately) can land in a broken state: cockpit reports `failed to load — Dependency "maestro@cockpit" is not installed` while maestro sits `disabled`. The already-installed maestro was never "pulled in" to satisfy anything, so it never got the explicit enable that a dependency install writes. One command fixes it:
 
@@ -67,7 +74,7 @@ Verify by re-running the detection command, not by trusting the installer's outp
 
 ### Tier 2 — companion skills
 
-Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
+A clean machine has **none** of these — Tier 0 installs cockpit and maestro and nothing else. Absence here is the default state, not a broken install, and a user who only plans and ships code never needs any of it. Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
 
 | Skill | Unlocks | Source |
 |---|---|---|

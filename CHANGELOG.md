@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.6.2 — 2026-08-03
+
+The clean-machine install path, verified in an isolated config dir rather than assumed. One
+command does resolve the dependency — `claude plugin install cockpit@cockpit` prints
+`+ 1 dependency: maestro` and leaves both `✔ enabled` with the complete tree, all eight
+process skills and all ten vendored corpora. The docs around that command were wrong in two
+ways that would stop any new user cold.
+
+- **`/reload-plugins` was missing from the install sequence.** Claude Code live-detects edits
+  under `~/.claude/skills/`, but a plugin install is invisible to that watcher — so a skill
+  installed mid-session does not exist, does not autocomplete, and reads to the user as a
+  failed install. It is now the third command in the README's install block, and the first
+  thing `setup` checks when someone says "no command shows up".
+- **The README named the wrong command.** It said `/setup`, but plugin skills are namespaced
+  by their plugin: `/cockpit:setup`, `/cockpit:pilot`, `/maestro:maestro` are what autocomplete
+  (bare names resolve too, but only while nothing else claims them). Both files now give the
+  namespaced form, because it is the one that cannot collide.
+- **What the install does *not* cover is now stated, not implied.** A table in the README
+  separates what arrives automatically (both plugins, maestro's library) from what does not
+  (Node, FFmpeg, the hyperframes suite, media-use, Remotion). Tier 2 of `setup` now leads with
+  the fact that a clean machine has none of the companion skills — absence there is the default
+  state, not a broken install.
+
+
 ## 1.6.1 — 2026-08-03
 
 Two defects in 1.6.0, both found by actually running `setup` on a real machine rather than
