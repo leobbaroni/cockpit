@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.6.1 — 2026-08-03
+
+Two defects in 1.6.0, both found by actually running `setup` on a real machine rather than
+reading it.
+
+- **The FFmpeg check reported a false pass.** `ffmpeg -version | head -1` prints *nothing* when
+  the binary is missing, so a missing FFmpeg rendered as a blank cell instead of a failure —
+  precisely the "tool you know is installed" assumption the skill exists to prevent. Now
+  `command -v ffmpeg` (`Get-Command` in PowerShell), with the reason written next to it: test
+  for the binary, not for its output.
+- **Updating from ≤ 1.5.0 lands in a broken state.** Where maestro was already installed
+  separately, introducing the dependency leaves cockpit `failed to load — Dependency
+  "maestro@cockpit" is not installed` with maestro `disabled`: the existing install was never
+  "pulled in" to satisfy anything, so it never received the explicit enable a dependency
+  install writes. `claude plugin enable maestro@cockpit` fixes it, and that is now in the skill
+  alongside two other CLI facts worth knowing — `update` and `enable` need the qualified
+  `name@marketplace` form (a bare name fails with `Plugin not found`), and updates require a
+  restart before the new skill bodies load.
+
+
 ## 1.6.0 — 2026-08-03
 
 **One install gets the whole stack, and a new `setup` skill tells you what that stack can

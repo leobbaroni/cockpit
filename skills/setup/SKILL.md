@@ -18,7 +18,7 @@ Run these and read the output. Missing tools are a normal result, not an error t
 |---|---|---|
 | The pack itself | `claude plugin list` | Both `cockpit` and `maestro` present, enabled, and on the versions you expect |
 | Node | `node --version` | **≥ 22** is the floor for the video toolchain |
-| FFmpeg | `ffmpeg -version` | Must be a standalone binary on `PATH`. A bundled encoder inside a library does not satisfy this |
+| FFmpeg | `command -v ffmpeg` (`Get-Command ffmpeg` in PowerShell) | Must be a standalone binary on `PATH`. A bundled encoder inside a library does not satisfy this. **Test for the binary, not its output** — `ffmpeg -version \| head -1` prints nothing when the command is missing, which reads as a blank cell rather than a failure |
 | Companion skills | list the skills directory (`~/.claude/skills/` on macOS/Linux, `%USERPROFILE%\.claude\skills\` on Windows) plus any plugin-provided ones | Which specialists the routing tables can actually reach |
 | Remotion, if a project exists | `npx remotion versions` | Version-gated APIs depend on this, and the CLI self-updates its own skills |
 
@@ -47,6 +47,14 @@ Ask before each tier. Never install anything from a third-party source without e
 **maestro installs automatically** — cockpit declares it as a dependency, so one install brings both. Two consequences worth stating when they come up: maestro cannot be disabled on its own while cockpit is enabled (Claude Code refuses and prints a chained disable command), and cockpit carries maestro's ~5 MB library whether or not the user does design work.
 
 If maestro is somehow missing, `/reload-plugins` or re-running the install resolves it, provided the marketplace is still configured.
+
+**Updating from a version before the dependency existed** (cockpit ≤ 1.5.0, where maestro was installed separately) can land in a broken state: cockpit reports `failed to load — Dependency "maestro@cockpit" is not installed` while maestro sits `disabled`. The already-installed maestro was never "pulled in" to satisfy anything, so it never got the explicit enable that a dependency install writes. One command fixes it:
+
+```
+claude plugin enable maestro@cockpit
+```
+
+Note the CLI wants the **qualified** `name@marketplace` form for `update` and `enable`; a bare `claude plugin update cockpit` fails with `Plugin "cockpit" not found`. Updates also print *restart required to apply* — the running session keeps the old skill bodies until then.
 
 ### Tier 1 — runtime prerequisites
 
