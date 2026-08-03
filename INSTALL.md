@@ -293,6 +293,12 @@ distribution routes differ, and a name present locally but absent from the plugi
 `website-to-video` is) must be kept. `/cockpit:setup` does this comparison for you and lists
 what it would remove before removing it.
 
+Worth knowing while you're in there: `npx skills add` installs into **`~/.agents/skills/`** —
+the cross-tool Agent Skills location — and symlinks into `~/.claude/skills/`. Claude Code reads
+only the latter, so removing a symlink resolves the shadowing while leaving the files in place
+for any other tool that uses them. Run `ls -la ~/.claude/skills/` and look for `->` before
+assuming an entry is a plain directory.
+
 **Uninstalling.**
 
 ```bash

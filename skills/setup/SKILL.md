@@ -33,10 +33,23 @@ A user who installed skills by hand (`npx skills add …`, or copying a `skills/
 *later* installed the plugin that provides the same skills now has two copies of each. The
 hand-installed ones never update, and which one answers is not something they chose.
 
+**First, know that there are three locations, not two.** `npx skills add` and similar
+cross-tool installers write to **`~/.agents/skills/`** — the Agent Skills standard location,
+shared with other harnesses — and drop a **symlink** into `~/.claude/skills/`. Claude Code
+itself reads only `~/.claude/skills/`, the project's `.claude/skills/`, and plugin directories;
+it never reads `~/.agents/skills/` directly. Two consequences that change what you do:
+
+- `ls ~/.claude/skills/` shows a directory name whose real content lives elsewhere. Use
+  `ls -la` and check for `->` before treating an entry as a plain folder.
+- **Removing a symlink does not remove the skill's files.** The content stays in
+  `~/.agents/skills/`, still used by whatever other tools point there. That is usually what you
+  want — say so rather than implying you deleted 22 MB you did not.
+
 Resolve it by evidence, never by assumption:
 
-1. **Diff every shared name**, directory against directory. Do not compare version strings —
-   these skills mostly do not carry one.
+1. **Diff every shared name**, directory against directory (`diff -r` follows the symlink, which
+   is correct here — you want to compare content). Do not compare version strings — these skills
+   mostly do not carry one.
 2. **Classify each**: identical · plugin is a superset · **local has files the plugin lacks**.
    That third case is the only one that matters, and it is why this is a diff and not a
    `rm -rf`. A local-only file means deleting would destroy a capability.

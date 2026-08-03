@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.5 — 2026-08-03
+
+**There is a third skills location, and the shadowing procedure was wrong without it.**
+Verified while resolving a real shadowed install: `npx skills add` and similar cross-tool
+installers write to **`~/.agents/skills/`** — the Agent Skills standard location, shared with
+other harnesses — and drop a *symlink* into `~/.claude/skills/`. Claude Code reads only
+`~/.claude/skills/`, the project's `.claude/skills/`, and plugin directories; it never reads
+`~/.agents/skills/` itself.
+
+- **`ls` lies about what those entries are.** A name in `~/.claude/skills/` can be a symlink
+  whose content lives 22 MB away. `setup` now says to run `ls -la` and check for `->` before
+  treating an entry as a plain folder — and that `diff -r` following the link is correct, since
+  content is what you are comparing.
+- **Removing a symlink is not deleting the skill.** The files stay in `~/.agents/skills/`, still
+  live for whatever other tool points there. Usually the desired outcome, but the skill now says
+  to report it accurately rather than claiming a deletion that did not happen.
+
 ## 1.6.4 — 2026-08-03
 
 **Verified against the installed plugin instead of the catalog, and it did not match.** 1.6.3
