@@ -29,6 +29,8 @@ Two things to know when routing to it: its interview asks **the user** which des
 
 ## Codex setup
 
+Full instructions, including the runtime prerequisites and the optional video toolchain, are in [INSTALL.md](INSTALL.md) — its "Non-Claude harnesses" section is this path, and its troubleshooting list applies regardless of harness.
+
 For a global install, add one line to `~/.codex/AGENTS.md` (create the file if absent):
 
 ```

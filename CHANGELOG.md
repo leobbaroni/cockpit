@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.6.3 — 2026-08-03
+
+**A guide, and a `setup` that can actually close the gaps it finds.** 1.6.2 documented that the
+plugin install covers cockpit and maestro only; this release says what to do about the rest,
+with commands verified against a real machine rather than recalled.
+
+- **[INSTALL.md](INSTALL.md).** The full path end to end — the four-command quick start, what
+  arrives at each tier and what does not, runtime prerequisites per OS, the video toolchain,
+  what the whole thing costs in context, the Codex path, and a troubleshooting section built
+  from failures this install path actually produced: the missing `/reload-plugins`, the
+  qualified `name@marketplace` form, the ≤ 1.5.0 dependency trap, Windows `MAX_PATH`, and
+  hand-copied skills shadowing the plugin.
+- **The HyperFrames suite is one command, from the official marketplace.**
+  `/plugin install hyperframes@claude-plugins-official` installs 21 skills — the router, the
+  seven domain skills, eleven workflow skills, **and `media-use` and `figma`, which ship inside
+  it**. Both this repo and maestro previously implied hand-copying a `skills/` folder and
+  hunting for `media-use` separately. Neither was necessary.
+- **`setup` now states the context bill before recommending the suite.** 21 descriptions is
+  ~4,850 always-on tokens, roughly five times cockpit and maestro combined, because always-on
+  cost scales with the number of skills rather than their size. Right trade for someone who
+  renders video, pure loss for someone who doesn't — the skill makes the user decide knowingly
+  instead of recommending by default.
+
 ## 1.6.2 — 2026-08-03
 
 The clean-machine install path, verified in an isolated config dir rather than assumed. One

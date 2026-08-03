@@ -10,6 +10,8 @@ Report what this stack can and cannot do **on this machine**, then close the gap
 
 Modes: `check` (detect and report, change nothing — the default) · `fix` (report, then offer each gap in order) · `full` (report, then walk every tier including the optional third-party ones).
 
+The written companion to this skill is **[INSTALL.md](../../INSTALL.md)** in the cockpit repo — the same tiers, the same commands, plus a troubleshooting section covering every failure this install path is known to produce. Point users there when they want to read ahead, when they are setting up a machine without an agent session to run this in, or when they hit a symptom in that list.
+
 ## Step 1 — Look
 
 Run these and read the output. Missing tools are a normal result, not an error to hide.
@@ -76,11 +78,16 @@ Verify by re-running the detection command, not by trusting the installer's outp
 
 A clean machine has **none** of these — Tier 0 installs cockpit and maestro and nothing else. Absence here is the default state, not a broken install, and a user who only plans and ships code never needs any of it. Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
 
-| Skill | Unlocks | Source |
+| Skill | Unlocks | Install |
 |---|---|---|
-| **hyperframes** suite | HTML-to-video authoring, the lint/check/snapshot/render loop, and every specialized video workflow (product launch, explainer, captions, motion graphics) | `github.com/heygen-com/hyperframes` |
-| **media-use** | Resolving music, SFX, images, icons, logos, voiceover, captions, grades, and LUTs to real files instead of improvising them | Its own distribution |
-| **Remotion** | React-to-video, frame-exact programmatic control, and shotcraft's template mode | `npx create-video@latest`, then `npx remotion upgrade` keeps its skills current |
+| **hyperframes** suite — 21 skills | HTML-to-video authoring, the lint/check/snapshot/render loop, every specialized workflow (product launch, explainer, captions, motion graphics, slideshow, website-to-video), **and `media-use` and `figma`, which ship inside it** | `/plugin install hyperframes@claude-plugins-official` — it is in Anthropic's official marketplace, so it installs exactly like cockpit. Add the marketplace first if needed: `/plugin marketplace add anthropics/claude-plugins-official`. Outside the plugin system: `npx skills add heygen-com/hyperframes --full-depth` |
+| **media-use** | Resolving music, SFX, images, icons, logos, voiceover, captions, grades, and LUTs to real files instead of improvising them | **No separate install** — it ships inside the hyperframes suite above. Do not send the user hunting for it |
+| **Remotion** | React-to-video, frame-exact programmatic control, and shotcraft's template mode | `npx create-video@latest --yes --blank --no-tailwind my-video && cd my-video && npm i`, per project. `npx remotion upgrade` keeps the library and its bundled skills current |
+
+**State the context cost before installing the suite.** Its 21 descriptions sit in every session
+at roughly 4,850 tokens — about five times cockpit and maestro combined — because always-on cost
+scales with the *number* of skills, not their size. That is a fine trade for someone who renders
+video and a pure loss for someone who does not. Let the user make it knowingly.
 
 ### Tier 3 — source corpora maestro cannot bundle
 
