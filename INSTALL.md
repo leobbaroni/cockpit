@@ -202,7 +202,7 @@ against the actually-installed builds — cockpit 1.6.x, maestro 3.6.x, hyperfra
 
 **The hyperframes suite costs about 2.4× cockpit and maestro combined**, permanently, in every
 session — because always-on cost scales with the *number* of skills, not their size. That is
-why maestro is one skill with 24 reference modules rather than 24 skills: its 5 MB library and
+why maestro is one skill with 25 reference modules rather than 24 skills: its 5 MB library and
 every module in it are free until something reads them.
 
 Numbers move between releases, and Anthropic's plugin catalog reports a higher figure for a
