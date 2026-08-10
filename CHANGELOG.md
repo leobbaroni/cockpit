@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.6.6 — 2026-08-10
+
+**A debloat pass that mostly refused to cut, and says so.** Six analysts proposed 49 deletions
+across all twelve skill files; an adversarial pass whose only job was to *refute* each one — 
+defaulting to keep when uncertain — confirmed **11** and rejected **38**. Net: 1,061 bytes,
+about 1% of the pack.
+
+- **pilot proposed 8 cuts and zero survived.** Every one turned out to name a failure mode, a
+  trigger, or a conflict resolution. That is the honest answer to "debloat pilot": it is dense,
+  not padded, and the 23 KB sits in 200 lines because the prose is doing work.
+- **What did go** was genuinely inert: a paraphrase weaker than the two rules following it, a
+  restatement of a fenced template three lines above it, an emphasis clause asserting a causal
+  link already stated in the other direction, a provenance claim about the skill's own authoring
+  that sat in tension with its first Rule, and three pieces of meta-commentary about a file's
+  structure rather than instruction to follow.
+- **The keep rule, now demonstrated rather than asserted:** a bare rule gets followed
+  selectively; a rule attached to the failure it prevents gets followed. Anything naming a
+  concrete symptom, threshold, command, or ambiguity survived by design.
+
+Also: maestro's reference-module count tracked to 26 in INSTALL.md.
+
 ## 1.6.5 — 2026-08-03
 
 **There is a third skills location, and the shadowing procedure was wrong without it.**

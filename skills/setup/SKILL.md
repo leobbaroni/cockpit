@@ -90,8 +90,6 @@ Ask before each tier. Never install anything from a third-party source without e
 
 If maestro is somehow missing, re-running the install resolves it, provided the marketplace is still configured.
 
-**On a genuinely clean machine this tier is verified to work in one command.** A fresh config dir with only the marketplace added, then `claude plugin install cockpit@cockpit`, yields cockpit and maestro both `✔ enabled` with the full tree — all eight process skills and all ten vendored corpora. Do not send a new user to install maestro separately; that is the path that creates the mess below.
-
 **Updating from a version before the dependency existed** (cockpit ≤ 1.5.0, where maestro was installed separately) can land in a broken state: cockpit reports `failed to load — Dependency "maestro@cockpit" is not installed` while maestro sits `disabled`. The already-installed maestro was never "pulled in" to satisfy anything, so it never got the explicit enable that a dependency install writes. One command fixes it:
 
 ```
@@ -107,11 +105,9 @@ Unlocks: rendering video at all.
 - **Node ≥ 22** — the floor for both video toolchains.
 - **FFmpeg on PATH** — a standalone install (`brew install ffmpeg` · `winget install Gyan.FFmpeg` · `apt install ffmpeg`). HyperFrames shells out to it; Remotion bundles its own encoder and does not need it, so a Remotion-only user can skip this.
 
-Verify by re-running the detection command, not by trusting the installer's output.
-
 ### Tier 2 — companion skills
 
-A clean machine has **none** of these — Tier 0 installs cockpit and maestro and nothing else. Absence here is the default state, not a broken install, and a user who only plans and ships code never needs any of it. Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
+A clean machine has **none** of these — Tier 0 installs cockpit and maestro and nothing else. Absence here is the default state, not a broken install,. Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
 
 | Skill | Unlocks | Install |
 |---|---|---|

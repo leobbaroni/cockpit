@@ -15,7 +15,7 @@ below exists to satisfy that constraint. Write for them, not for the person you 
 
 ## 1. Look, don't ask
 
-For every fact, prefer a lookup over a question. Anything a tool you hold — or code, docs, or
+Anything a tool you hold — or code, docs, or
 links the user gave you — can settle is a lookup, not a question. Ask only for what nothing can
 look up: intent, constraints, stakes, taste, what exists outside this machine.
 
@@ -106,7 +106,7 @@ Recommended: <concrete answer> — <one-line basis>.
 Also credible: <second branch> — <when it would be right instead>.   ← only when genuinely live
 ```
 
-Status line, findings first (two sentences max), question last. No filler, no progress theater.
+No filler, no progress theater.
 
 ## 4. Before the first question
 
@@ -127,7 +127,7 @@ an expensive guess. Yes → record the decision. No → that is a stall, and a q
 questions. Then score each `[assumed]` by blast radius × doubt; high on both gets asked, the rest
 stays tagged. Sorted, that is your question queue.
 
-Classify every decision into one of four bins — this is the whole question discipline, and the reason the interview needs no cap:
+Classify every decision into one of four bins:
 
 | Bin | Test | What you do |
 |---|---|---|
@@ -204,7 +204,7 @@ cost-of-wrong-branch, so ask from the top. The moment the top-ranked fork would 
 wrong than to ask about — and every question already spent raises that asking price — close:
 default-and-tag everything still open. Two consecutive answers that fail to shrink the open-fork
 count mean churn rather than convergence; checkpoint if you haven't, otherwise close. This is what
-replaces a cap, and it is the honest version of one: a question is worth asking when the wrong
+replaces a cap: a question is worth asking when the wrong
 branch is expensive, and a fifteenth question on a real migration can clear that bar while a sixth
 on a one-file fix does not.
 
