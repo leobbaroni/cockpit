@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.1 — 2026-08-15
+
+maestro renamed its `§3` mockup fan-out to **the direction round** (maestro 3.12.0), rebuilt on
+impeccable's dice-dealt roll. cockpit pointed at the old name in three places — `pilot`'s KICKOFF
+and IMPROVE routing, and `orchestrate`'s design standing default. All three now name the round
+and carry the one line that matters when routing to it: **the lead direction is dealt rather than
+ranked, and presenting your own top pick as the round is the lookalike it exists to prevent.**
+
 ## 1.7.0 — 2026-08-15
 
 **Crews get a second model, and a ladder to climb instead of a place to stop.** A crew was one

@@ -44,7 +44,7 @@ For "plan this properly" requests and every KICKOFF. The product is a plan anoth
 
 ## KICKOFF — PLAN, then build
 
-Run PLAN in full (never skip the interview for a multi-day build), ask once for the project's push policy and record it in the project's agent instructions file (`CLAUDE.md` / `AGENTS.md`), then propose the crew (see *Crew proposal*) and hand the batch to `orchestrate`. New UI surfaces go through `maestro`'s mockup fan-out gate (when installed) before implementation — and its grill decides, with the user, which design house leads the project's look; that pick belongs in the SPEC alongside the rest of the brief.
+Run PLAN in full (never skip the interview for a multi-day build), ask once for the project's push policy and record it in the project's agent instructions file (`CLAUDE.md` / `AGENTS.md`), then propose the crew (see *Crew proposal*) and hand the batch to `orchestrate`. New UI surfaces go through `maestro`'s **direction round** (when installed) before implementation — and its grill decides, with the user, which design house leads the project's look; that pick belongs in the SPEC alongside the rest of the brief.
 
 ## BUILD — next task, done properly
 
@@ -64,7 +64,7 @@ Never review by reading top-to-bottom and reacting. Pick the tier, route the dim
 
 ## IMPROVE — no work without criteria
 
-If the ask is vague ("make it better", "feels off"), extract a concrete brief FIRST — one batched question, not a build attempt: **one reference** (site, app, screenshot — if it's behind a login, ask for a screenshot instead of silently skipping), **2–3 banned qualities** ("no card grid", "not so text-dense"), **one checkable done-condition** ("the table fits 380px without horizontal scroll"). Then route: UI/UX → `maestro` (critique loop; its `commands` module has a named protocol for most improvement asks — bolder, quieter, distill, polish, typeset, layout, clarify — so match the ask to one instead of improvising; mockup fan-out if the direction itself is in question); dead weight → `simplify`; suspected bug with a known diff → REVIEW, cause unknown → DEBUG; performance → **measure first** (profile/timing baseline), never optimize blind. Re-verify against the done-condition before reporting.
+If the ask is vague ("make it better", "feels off"), extract a concrete brief FIRST — one batched question, not a build attempt: **one reference** (site, app, screenshot — if it's behind a login, ask for a screenshot instead of silently skipping), **2–3 banned qualities** ("no card grid", "not so text-dense"), **one checkable done-condition** ("the table fits 380px without horizontal scroll"). Then route: UI/UX → `maestro` (critique loop; its `commands` module has a named protocol for most improvement asks — bolder, quieter, distill, polish, typeset, layout, clarify — so match the ask to one instead of improvising; the direction round if the direction itself is in question); dead weight → `simplify`; suspected bug with a known diff → REVIEW, cause unknown → DEBUG; performance → **measure first** (profile/timing baseline), never optimize blind. Re-verify against the done-condition before reporting.
 
 ## DEBUG — repro before hypotheses
 

@@ -1,7 +1,7 @@
 {
   "name": "cockpit",
   "displayName": "Cockpit",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (the evidence-tagged interview that turns an ask into a build-ready plan), grill-with-docs (grilling + live ADRs/glossary), orchestrate (multi-agent task batches), handoff (logs, guides, delivery), diagnosing-bugs (repro-first debugging), domain-modeling (glossary + ADRs), and setup (detect what the stack can do on this machine and close the gaps). Installs the maestro design/motion/video skill as a dependency. Harness-neutral: Claude Code native, Codex via AGENTS.md.",
   "author": {
     "name": "leobbaroni",
