@@ -85,14 +85,14 @@ Never fan work out on a silently-chosen crew. Whenever a batch is about to go to
 | Role | Wants | Picks the… *(parenthesised names are today's Claude Code tiers — substitute your harness's equivalents)* |
 |---|---|---|
 | **Lead / designer** | decomposition, judgment, final review, design taste | **the model the session is set to** — whatever the user selected, unchanged |
-| **Hard** | architecture, tricky bugs, cross-cutting refactors, anything that already failed once | strongest reasoner (Opus 5) |
+| **Hard** | architecture, tricky bugs, cross-cutting refactors — work **classified hard before it runs** | strongest reasoner (Opus 5) |
 | **Mechanical** | known fixes, renames, boilerplate, docs, config, bulk edits | fast/cheap tier (Sonnet 5; Haiku 4.5 for trivial bulk) |
 | **Review** | fresh adversarial eyes | a *different* model from the one that wrote the code, whenever the harness offers one — diverse perspective catches what self-review cannot |
 
 **The session model is the user's standing instruction.** Whatever they switched to is the lead and the designer — do not propose demoting it, do not route lead work to a subagent on a different model to "save cost", and do not switch the top-level model to route work. **The lead role is what never moves**; implementation work routes freely around it:
 
 - **Down** to the fast tier for mechanical items.
-- **Up** to the strongest reasoner for hard implementation — architecture, tricky bugs, anything that already failed once. Routing a hard *subtask* up is not a demotion of the lead; the lead still decomposes, reviews, and decides.
+- **Up** to the strongest reasoner for hard implementation — architecture, tricky bugs, anything classified hard up front. Routing a hard *subtask* up is not a demotion of the lead; the lead still decomposes, reviews, and decides. **A task that has already failed is a different question**: it climbs the ladder (`orchestrate` §2a) rather than jumping a tier, because the first rung is a better prompt and most misses are missing context.
 - **Sideways** to a different model for adversarial review.
 
 If the session model is already the strongest reasoner available, the up-route is a no-op and lead and hard collapse into one tier; say so in a line instead of inventing a distinction.
@@ -101,9 +101,30 @@ If the session model is already the strongest reasoner available, the up-route i
 
 **4. Offer the real alternatives, ask once.** Present the proposal (recommended) against **all-frontier** (best quality, slower and pricier), **all-fast** (cheap sweep, weak on architecture), and **custom**. A model the user names explicitly always wins and is never re-litigated.
 
-**5. Remember the answer.** Record the accepted mapping for the session — and into `PLAN.md` when the batch came from there — then propose *once*, not per task. Re-open it only when the work changes character (a mechanical batch turning architectural, or a stage failing twice and needing escalation), or when the user asks.
+**5. Remember the answer.** Record the accepted mapping for the session — and into `PLAN.md` when the batch came from there — then propose *once*, not per task. Re-open it only when the work changes character (a mechanical batch turning architectural), or when the user asks. A failing stage does **not** re-open the crew question — that is what the rescue crew below is for, agreed once and then acted on without a fresh negotiation.
 
 Skip the ceremony when a batch is small and uniformly mechanical: state the crew in one line and proceed.
+
+### The rescue crew — the second model, and what wakes it
+
+A crew is two decisions, not one. The first is who does the work; the second is **who gets called when the work fights back**. Propose both in the same breath, because deciding it mid-failure is deciding it while annoyed.
+
+**Ask for one model and one number.** The rescue model — the strongest reasoner reachable, or whatever the user names — and the attempt count that wakes it (default **2**). Then state the signals that wake it *regardless* of count, because repetition is a weak proxy for difficulty: three attempts at a rename and three at a concurrency bug are not the same event.
+
+| Wakes the rescue crew | Why this one |
+|---|---|
+| **N failed attempts on one task** (default 2) | The plain counter. Per task, and **a passing verification clears it** — task 7 failing twice says nothing about task 8 |
+| The same test or check red **twice** | The fix isn't landing where the failure is |
+| A reviewer raising a **blocking finding on the same file twice** | The implementer is not reading the finding |
+| An agent **reporting itself blocked** | Fires on attempt one; waiting for a count wastes the information |
+
+**The rescue crew reviews and fixes in one pass**, deliberately. Splitting them hands the diagnosis to a second model as a written finding, and the diagnosis is the expensive part — a correct diagnosis re-derived from a summary is how you get a confident wrong fix. **The original tier then runs the acceptance check only** — not a re-review, just the check — which restores independent eyes on the outcome without paying for a second full pass.
+
+**Announce every escalation in one line — which rung, what fired it, which tier — and keep working.** Do not pause for permission. Silence is consent, the user can interrupt, and stalling an unattended batch on the exact task that needed help is the worst available outcome. Since the ladder never stops on its own, **this announcement is the only brake**, so it is not optional.
+
+The ladder itself lives in `orchestrate` §2a, because that is where the work runs.
+
+Record the rescue model and its count alongside the rest of the mapping — in `PLAN.md` when the batch came from a plan — and don't re-ask.
 
 ## Specialist routing table
 

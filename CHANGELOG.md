@@ -1,5 +1,69 @@
 # Changelog
 
+## 1.7.0 — 2026-08-15
+
+**Crews get a second model, and a ladder to climb instead of a place to stop.** A crew was one
+decision — who does the work. It is now two: who does the work, and **who gets called when the
+work fights back**. Both agreed in the same breath, because deciding the second one mid-failure
+is deciding it while annoyed.
+
+### The rescue crew (`pilot`)
+
+One model and one number, asked during the crew proposal. The model is the strongest reasoner
+reachable or whatever the user names; the number is the attempt count that wakes it, default 2.
+Recorded with the rest of the mapping — in `PLAN.md` when the batch came from a plan — and not
+re-asked.
+
+**A count alone is a weak proxy for difficulty**, so three signals wake it regardless: the same
+check red twice, a reviewer raising a blocking finding on the same file twice, and an agent
+reporting itself blocked (which fires on attempt one, because waiting for a count discards the
+information). The counter is **per task and clears on a passing verification** — task 7 failing
+twice says nothing about task 8.
+
+**It reviews and fixes in one pass, deliberately.** Splitting them hands the diagnosis to a
+second model as a written finding, and the diagnosis is the expensive part — a correct diagnosis
+re-derived from a summary is how you get a confident wrong fix. The original tier then runs the
+**acceptance check only**, which restores independent eyes on the outcome without paying for a
+second full pass.
+
+### The ladder (`orchestrate` §2a)
+
+Five rungs, ordered so **every rung costs more effort than the one below it** — a ladder whose
+top rung is easier than its bottom rung is a ladder people fall down.
+
+1. **Retry, same tier, better prompt.** Most misses are missing context, not a weak model.
+2. **Rescue crew** — combined review + fix.
+3. **Rescue crew again, every failed approach banned by name.** *Change the approach, not the
+   model.* Two failures is evidence about the approach, and a pass left free to retry it will.
+4. **Decompose.** A task that has failed three times is usually two tasks wearing one name.
+5. **Hand back — external blockers only.**
+
+Rung 3 is the one that gets skipped: banning an approach means *writing it down* in the
+delegation prompt. An approach you merely intend not to retry is one the next agent rediscovers.
+
+### The hand-back bar, and why it is this tight
+
+**"It's hard" is not a blocker. "Two models failed" is not a blocker.** Those describe the work,
+and the work is the job. Hand back only for something nameable and external — a missing
+credential, an unreachable service, an ambiguity only the user can resolve.
+
+The looser version was rejected for a specific reason: **any bound shaped "after N failures, stop
+and report" makes reaching N a way to finish.** Climbing must always cost less than reaching the
+top. Exhausting the ladder is how you *discover* whether a blocker is external — and if you
+cannot name it, you have not finished climbing.
+
+Since nothing stops the ladder automatically, **the one-line escalation announcement is the only
+brake** — which rung, what fired it, which tier — stated without pausing for permission. Stalling
+an unattended batch on the task that needed help most fails at the thing the batch exists for.
+
+### Contradictions removed
+
+Escalation was previously specified twice and differently: `orchestrate` said escalate when a
+step **fails once**, `pilot` said reopen the crew on a stage **failing twice**. Both are gone —
+one configured trigger, one ladder. Both skills also routed "anything that already failed once"
+straight to the frontier tier, which skipped rung 1 entirely; the difficulty tables now describe
+work **classified hard up front**, and a task that has already failed climbs instead.
+
 ## 1.6.6 — 2026-08-10
 
 **A debloat pass that mostly refused to cut, and says so.** Six analysts proposed 49 deletions
