@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.8.0 — 2026-08-18
+
+**An installer, because "install everything" had no command.** `setup` could detect a gap and
+hand you the command to close it, one tier at a time. Now `scripts/install.sh` and
+`scripts/install.ps1` do the whole stack in order — Node and FFmpeg, the pack, impeccable, the
+optional video suite — asking before each third-party install and naming its source.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.sh | bash
+```
+```powershell
+irm https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.ps1 | iex
+```
+
+Idempotent — running it on a configured machine reports green and touches nothing. `--yes` for
+unattended, `--check` to detect without changing anything. Both were run against a real machine
+before shipping, and the `-Check` pass is what verified this one.
+
+It also carries the two facts that trip people, so a fresh machine does not have to learn them:
+it runs `claude plugin enable maestro@cockpit` (the upgrade path from ≤ 1.5.0 that otherwise
+leaves cockpit unable to load), and it closes by naming `/reload-plugins`, without which none of
+the newly installed commands exist in the running session.
+
+### impeccable becomes a named tier
+
+maestro 3.12.0 made the direction round hand off to impeccable's dice-dealt roll. That handoff
+had no install path anywhere in cockpit, so it would silently never fire. `setup` gains an
+impeccable row and INSTALL.md a **Step 3a**, both carrying the check that matters:
+
+**Verify the roll, not the skill.** An older impeccable install carries the hook and live-mode
+scripts *without* `concept-seed.mjs` — it reports as installed while the roll is missing, which
+is exactly how a handoff fails silently. The check is the path:
+`~/.claude/skills/impeccable/scripts/concept-seed.mjs`.
+
+### Also
+
+`setup` gains an `install` mode. Its Tier 2 lead-in had a stray comma splice, fixed while
+reading. README and INSTALL.md both open with the one-liner now, and INSTALL.md's arrival table
+gained the impeccable row.
+
 ## 1.7.1 — 2026-08-15
 
 maestro renamed its `§3` mockup fan-out to **the direction round** (maestro 3.12.0), rebuilt on

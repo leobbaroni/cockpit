@@ -21,6 +21,16 @@ The skills reference each other by name and ship together, so every internal ref
 
 ## Installation
 
+**One command installs everything** — the pack, impeccable, and the optional video stack, asking before each third-party install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.sh | bash
+```
+
+```powershell
+irm https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.ps1 | iex
+```
+
 **[INSTALL.md](INSTALL.md) is the full guide** — every tier, the video toolchain, what it costs
 in context, and a troubleshooting section for every failure this path is known to produce. The
 short version follows.

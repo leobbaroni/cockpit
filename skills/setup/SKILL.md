@@ -1,14 +1,14 @@
 ---
 name: setup
 description: Check what the cockpit + maestro stack can actually do on this machine, and close the gaps. Detects installed plugins, companion skills, and runtime prerequisites (Node, FFmpeg), reports what each missing piece costs you in capability, and gives the exact command to fix it. Use on "set up cockpit", "install the stack", "what's missing", "why can't it render video", "is everything installed", or after a fresh install on a new machine.
-argument-hint: "[check | fix | full]"
+argument-hint: "[check | fix | full | install | update]"
 ---
 
 # Setup
 
 Report what this stack can and cannot do **on this machine**, then close the gaps with consent. Never guess at the environment — every line of the report comes from a command you ran this session.
 
-Modes: `check` (detect and report, change nothing — the default) · `fix` (report, then offer each gap in order) · `full` (report, then walk every tier including the optional third-party ones) · `update` (refresh everything already installed — see [Step 4](#step-4--keep-it-current)).
+Modes: `check` (detect and report, change nothing — the default) · `fix` (report, then offer each gap in order) · `full` (report, then walk every tier including the optional third-party ones) · `install` (run the installer script end to end, then verify) · `update` (refresh everything already installed — see [Step 4](#step-4--keep-it-current)).
 
 The written companion to this skill is **[INSTALL.md](../../INSTALL.md)** in the cockpit repo — the same tiers, the same commands, plus a troubleshooting section covering every failure this install path is known to produce. Point users there when they want to read ahead, when they are setting up a machine without an agent session to run this in, or when they hit a symptom in that list.
 
@@ -74,6 +74,24 @@ Rank by what the user actually does. Someone who only plans and orchestrates nee
 
 Ask before each tier. Never install anything from a third-party source without explicit approval naming the source.
 
+### One command — the installer
+
+Before walking tiers by hand, offer the script. It is idempotent, it prints what it finds, and `--check` / `-Check` changes nothing:
+
+```bash
+# macOS / Linux / Git Bash
+curl -fsSL https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.sh | bash
+```
+
+```powershell
+# Windows PowerShell
+irm https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.ps1 | iex
+```
+
+It does the whole stack in order — Node and FFmpeg, the pack, **impeccable** (which the design round hands off to), and the optional video suite — asking before each third-party install and naming the source. `--yes` skips the prompts for an unattended run; `--check` detects only.
+
+Run it yourself when the user asks to "install everything" or "set this up". Then still walk Step 1's detection: **the script's exit code is not the check**, and re-running detection is (see Rules).
+
 ### Tier 0 — the pack
 
 ```
@@ -107,10 +125,11 @@ Unlocks: rendering video at all.
 
 ### Tier 2 — companion skills
 
-A clean machine has **none** of these — Tier 0 installs cockpit and maestro and nothing else. Absence here is the default state, not a broken install,. Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
+A clean machine has **none** of these — Tier 0 installs cockpit and maestro and nothing else. Absence here is the default state, not a broken install. Each is optional, and the pack degrades honestly without it — the routing tables say so and do the work directly. Install what the user's work actually needs:
 
 | Skill | Unlocks | Install |
 |---|---|---|
+| **impeccable** | **The direction round's roll.** maestro's `§3` hands off to `concept-seed` and its decision page when impeccable is present; without it the round runs maestro's prose version — same discipline, no live approval page, no per-card comps, no re-roll pool | `npx impeccable install --providers=claude --scope=global` (github.com/pbakaus/impeccable). **Verify the roll specifically**: `~/.claude/skills/impeccable/scripts/concept-seed.mjs` must exist — an older install carries the hook and live scripts without it, and reports as present while the roll is missing |
 | **hyperframes** suite — 19 skills | HTML-to-video authoring, the lint/check/snapshot/render loop, every specialized workflow (product launch, explainer, captions, motion graphics, slideshow), **and `media-use` and `figma`, which ship inside it** | `/plugin install hyperframes@claude-plugins-official` — it is in Anthropic's official marketplace, so it installs exactly like cockpit. Add the marketplace first if needed: `/plugin marketplace add anthropics/claude-plugins-official`. Outside the plugin system: `npx skills add heygen-com/hyperframes --full-depth`, which ships one extra skill (below) |
 | **media-use** | Resolving music, SFX, images, icons, logos, voiceover, captions, grades, and LUTs to real files instead of improvising them | **No separate install** — it ships inside the hyperframes suite above. Do not send the user hunting for it |
 | **Remotion** | React-to-video, frame-exact programmatic control, and shotcraft's template mode | `npx create-video@latest --yes --blank --no-tailwind my-video && cd my-video && npm i`, per project. `npx remotion upgrade` keeps the library and its bundled skills current |

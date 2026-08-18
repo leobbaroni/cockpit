@@ -4,6 +4,22 @@ Every command here was run on a real machine before it was written down, and the
 in [Troubleshooting](#troubleshooting) are ones that actually happened rather than ones that
 might. If you only read one section, read [The 60-second path](#the-60-second-path).
 
+## One command
+
+```bash
+# macOS / Linux / Git Bash
+curl -fsSL https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.sh | bash
+```
+
+```powershell
+# Windows PowerShell
+irm https://raw.githubusercontent.com/leobbaroni/cockpit/main/scripts/install.ps1 | iex
+```
+
+Runs the whole stack in order — Node and FFmpeg, cockpit + maestro, impeccable, and the optional video suite — asking before each third-party install and naming its source. Add `--yes` / `-Yes` for an unattended run, or `--check` / `-Check` to detect without changing anything. It is idempotent: running it on a configured machine reports green and touches nothing.
+
+Then `/reload-plugins` and `/cockpit:setup`. The rest of this document is what that script does, in case you would rather do it by hand or something goes wrong.
+
 ## The 60-second path
 
 Claude Code, plugins enabled:
@@ -33,6 +49,7 @@ toolchain. It installs the skills that know how to use one.
 | maestro, with its vendored depth library | ✅ automatic, as a declared dependency | 5.6 MB, of which 5.0 MB is `library/` |
 | Node ≥ 22 | ❌ | Your machine's job |
 | FFmpeg on `PATH` | ❌ | Only needed for the HyperFrames render path |
+| **impeccable** | ❌ | One command — and it is what maestro's design round hands off to. See [Step 3a](#step-3a--impeccable-the-design-roll) |
 | hyperframes suite, media-use, figma | ❌ | One plugin install — see [Step 4](#step-4--the-video-stack-optional) |
 | Remotion | ❌ | Per-project scaffold, never global |
 
@@ -97,6 +114,22 @@ that name — prefer the namespaced form when writing anything down.
 The eight process commands: `/cockpit:pilot` · `/cockpit:grilling` · `/cockpit:grill-with-docs`
 · `/cockpit:orchestrate` · `/cockpit:handoff` · `/cockpit:diagnosing-bugs` ·
 `/cockpit:domain-modeling` · `/cockpit:setup`.
+
+## Step 3a — impeccable, the design roll
+
+```bash
+npx impeccable install --providers=claude --scope=global
+```
+
+maestro's direction round (`process.md` §3) **hands off to impeccable's roll when it is present** — `concept-seed` deals the lead direction rather than ranking it, and `serve-question` puts the hand on a live decision page with per-card comps and a re-roll pool. Without impeccable the round still runs, from maestro's own prose: same discipline, lower fidelity.
+
+**Verify the roll specifically, not just the skill.** An older install carries the hook and live-mode scripts *without* `concept-seed.mjs`, so it reports as installed while the roll is missing:
+
+```bash
+ls ~/.claude/skills/impeccable/scripts/concept-seed.mjs
+```
+
+If that path is absent, re-run the installer — `npx impeccable update` refreshes an existing install in place.
 
 ## Step 4 — the video stack (optional)
 
