@@ -9,7 +9,7 @@
     {
       "name": "cockpit",
       "source": "./",
-      "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (evidence-tagged interview → build-ready plan), grill-with-docs, orchestrate, handoff, diagnosing-bugs, domain-modeling, setup. Installs maestro as a dependency — one command gets the whole stack. Claude Code native, Codex via AGENTS.md."
+      "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (evidence-tagged interview -> build-ready plan), grill-with-docs, orchestrate, test-driven-development, using-worktrees, handoff, diagnosing-bugs, domain-modeling, setup. Installs maestro as a dependency - one command gets the whole stack. Claude Code native, Codex via AGENTS.md."
     },
     {
       "name": "maestro",
@@ -17,7 +17,7 @@
         "source": "url",
         "url": "https://github.com/leobbaroni/maestro.git"
       },
-      "description": "Unified design, motion, 3D, and video super skill — eleven upstream knowledge bases (incl. taste-skill, hallmark, and video-shotcraft leading product video) distilled into one voice, plus a generative-media family for prompting image and video models. Vendored full-corpus depth library, grill-first process."
+      "description": "Unified design, motion, 3D, and video super skill - thirteen upstream knowledge bases distilled into one voice over an eleven-corpus depth library. Higgsfield's and Comfy's first-party skills are the baseline for generative work: a live reachability probe, an OSS-vs-paid route gate, local-hardware checks, brand/product/thumbnail systems, and generated assets inside shipped pages. Grill-first process."
     }
   ]
 }
