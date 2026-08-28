@@ -29,6 +29,12 @@ Mega-prompts get items dropped. Before any work:
 
 On Claude Code the current defaults are: lead/design → the session's own model (unchanged), hard → Opus 5 (`model: "opus"`), easy → Sonnet 5 (`model: "sonnet"`; Haiku 4.5 for trivial bulk); prefer the Workflow tool for fan-outs of 3+ agents, the Agent tool for 1–2, and give agents that edit files in parallel `isolation: "worktree"`. On harnesses without subagents, run the batch sequentially yourself in difficulty order (hard items first, while context is freshest) and keep the same per-item reporting.
 
+**Fan out on independent domains, not on task count.** Split when the pieces have genuinely separate root causes — different subsystems, different test files, different bugs — and each can be understood without the others. Keep them together when fixing one might fix the rest, when understanding needs the whole system in view, or when you don't yet know what's broken: parallel agents on a shared cause produce three conflicting fixes for one problem.
+
+**A subagent inherits nothing.** It gets the context you construct, so build it deliberately — one problem domain, the actual error text and failing names pasted in, explicit constraints on what it may not touch ("fix the tests, don't change production code"), and a named return shape. The characteristic failures are a scope too broad to act on ("fix all the tests"), a symptom with no location, and no stated output — which leaves you unable to say what changed.
+
+**Issue every dispatch in one message** — that is what makes them concurrent; one per message runs them in series. Then integrate deliberately: read each summary, check whether two agents touched the same code, run the **full** suite rather than the sum of their claims, and spot-check the diffs. Agents make systematic errors, and a systematic error passes its own test.
+
 **Announce the crew before spending on it.** If `pilot` already proposed a model mapping and the user accepted it, use that mapping and do not re-ask. Otherwise state the assignment in one short table (task or dimension → role → model) before the first agent runs, and invite correction — the user may know a step deserves a stronger model than its difficulty suggests. Any model the user names explicitly wins over these defaults, always. When a step fights back, climb the ladder in §2a rather than silently re-running it bigger.
 
 ## 2a. When a task fights back — the escalation ladder

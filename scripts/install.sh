@@ -86,6 +86,24 @@ else
   fi
 fi
 
+head_ "5. Generative engines (optional, detect only)"
+echo "  Not auto-installed: one is a multi-GB GPU stack, the other is a paid service."
+if have comfy; then
+  ok "comfy-cli present — local ComfyUI is the free-per-run generation route"
+else
+  warn "ComfyUI absent — every generation is billed; no free local route"
+  echo "    pip install comfy-cli comfy-mcp && comfy install && comfy launch"
+  echo "    skills: /plugin marketplace add Comfy-Org/comfy-skills"
+fi
+if have higgsfield; then
+  ok "higgsfield CLI present"
+else
+  warn "Higgsfield CLI absent — maestro's generative modules are distilled from its skills"
+  echo "    /plugin marketplace add higgsfield-ai/skills && /plugin install higgsfield@higgsfield"
+  echo "    mcp: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp"
+  echo "    PAID — generations spend credits."
+fi
+
 head_ "Result"
 if [ "$CHECK" = 1 ]; then
   echo "  (check only — nothing was changed)"

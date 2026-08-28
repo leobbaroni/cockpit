@@ -52,6 +52,15 @@ needs no tag.)
 | **(verified: `<source>`)** | Established this session from a named source — the exact file, command, tool call, search, or artifact the user provided. Cite the specific thing (`package.json`, `ran: npm ls react`, `the spec you pasted`), never "verified" alone |
 | **[assumed: default X — if wrong: Y]** | Your default, tagged, with the consequence stated in line |
 
+**Two lookups that disagree have a precedence order.** It comes up constantly and resolving it
+by vibes is how a session talks itself out of a capability that exists: a lookup that **returns**
+something outranks your older evidence — if a fresh result shows a thing moved or was renamed,
+follow the live result. But older **direct** evidence — a command that succeeded, a file a call
+already showed present — outranks a later **empty** lookup. And **never deny something exists on
+an empty result alone**: broaden the query, drop version numbers, try the bare name first.
+Absence from a catalog is evidence about the catalog, not about the world. Telling a user a
+route doesn't exist when it does is a wrong answer, not a cautious one.
+
 **Memory is never a source.** Training data, "general knowledge", and "the docs say" without a
 read are `[assumed]`, not `(verified)` — that substitution is the single most common way a plan
 ships a fact that was never true. Versions come from a lockfile or a live check. API shapes from

@@ -2,7 +2,7 @@
 
 **The process pack for AI coding agents — planning, orchestration, review, debugging, and delivery as installable skills. Claude Code native; Codex-compatible via AGENTS.md.**
 
-Cockpit ships eight interlocking process skills and pulls in [maestro](https://github.com/leobbaroni/maestro) — the companion design/motion/3D/video skill — as a dependency, so **one install gets the complete stack**.
+Cockpit ships ten interlocking process skills and pulls in [maestro](https://github.com/leobbaroni/maestro) — the companion design/motion/3D/video skill — as a dependency, so **one install gets the complete stack**.
 
 ## What's inside
 
@@ -14,6 +14,8 @@ Cockpit ships eight interlocking process skills and pulls in [maestro](https://g
 | **orchestrate** | Lead-dev mode for task batches: parse-and-echo every ask, route to subagents by difficulty, verify behaviorally, review with fresh eyes, report per-item — never silent omission. |
 | **handoff** | End-of-phase packaging: append-only project log, how-to-run guides, end-user manuals, final-delivery cleanup with list-first-delete-second. |
 | **diagnosing-bugs** | Repro-first debugging: build a tight red-capable feedback loop before any hypothesis, minimise, then fix with a regression test. |
+| **test-driven-development** | The failing test comes first, and you watch it fail — because a test you never saw fail is a test you never saw work. The iron law (no production code without a failing test), red/green/refactor, the bug fix that starts with a reproduction, and the table of what a passing test does *not* prove. |
+| **using-worktrees** | Isolation before the work starts: detect isolation you already have (with the submodule false-positive guarded), prefer the harness's native worktree tool over `git worktree`, verify the directory is ignored before writing into it, then take the clean test baseline that makes every later failure attributable. |
 | **domain-modeling** | The project's ubiquitous language: challenge fuzzy terms, maintain CONTEXT.md, record hard-to-reverse choices as ADRs. |
 | **setup** | What can this machine actually do? Detects installed plugins, companion skills, Node, and FFmpeg, reports each gap as the capability it costs you rather than a package name, and closes them in tiers — asking before each one, and never cloning a third-party repo without approval. |
 
@@ -53,7 +55,7 @@ Setup checks what this machine can actually do and gives you the exact command f
 
 | | Comes with `/plugin install cockpit@cockpit` |
 |---|---|
-| cockpit's eight process skills | ✅ automatic |
+| cockpit's ten process skills | ✅ automatic |
 | maestro, including its ~5 MB vendored library | ✅ automatic, as a dependency |
 | Node ≥ 22, FFmpeg on PATH | ❌ your machine's job |
 | hyperframes suite, media-use, Remotion | ❌ separate installs |
@@ -126,7 +128,7 @@ Set up the "cockpit" process pack and its "maestro" companion for me.
 ```
 cockpit/
 ├── .claude-plugin/          Plugin + marketplace manifests (cockpit declares maestro as a dependency)
-├── skills/                  The eight process skills (one folder per skill)
+├── skills/                  The ten process skills (one folder per skill)
 ├── AGENTS.md                Codex / non-Claude harness router with the skill index
 ├── CLAUDE.md                Contributor rules (harness-neutrality contract)
 └── LICENSE · CHANGELOG.md
@@ -139,4 +141,4 @@ cockpit/
 
 ## License
 
-MIT. The eight skills are original process material; maestro carries its own license and upstream attribution in its repo.
+MIT. The ten skills are original process material; maestro carries its own license and upstream attribution in its repo.

@@ -16,10 +16,12 @@ When the user's request matches a trigger below, **open that skill file and foll
 | **orchestrate** | "orchestrate", a batch of 3+ tasks handed over at once, multi-agent builds, lead-dev mode | `skills/orchestrate/SKILL.md` |
 | **handoff** | Change log, how-to-run guide, end-user manual, revert instructions, final-delivery cleanup | `skills/handoff/SKILL.md` |
 | **diagnosing-bugs** | "diagnose / debug this", something broken/throwing/failing/slow with unknown cause, a fix that "didn't take" | `skills/diagnosing-bugs/SKILL.md` |
+| **test-driven-development** | Implementing any feature, fix, refactor, or behavior change — the failing test comes first and you watch it fail | `skills/test-driven-development/SKILL.md` |
+| **using-worktrees** | Isolating a workspace before a feature or a batch, and taking the clean test baseline | `skills/using-worktrees/SKILL.md` |
 | **domain-modeling** | Pinning domain terminology, recording an architectural decision (ADR), maintaining CONTEXT.md | `skills/domain-modeling/SKILL.md` |
 | **setup** | "set up cockpit", "install the stack", "what's missing", "why can't it render video", or a fresh machine | `skills/setup/SKILL.md` |
 
-Skills reference each other by name (pilot routes to grilling, orchestrate, diagnosing-bugs, handoff, domain-modeling); all eight ship here, so every in-pack reference resolves. References to skills outside this pack (`maestro`, `hyperframes`, `media-use`, `graphify`, `agent-reach`, `deep-research`, `code-review`, `simplify`, `security-review`, `review`, `docx`) are **optional specialists**: route to them when installed, otherwise do the work directly to the same standard and say the specialist was absent.
+Skills reference each other by name (pilot routes to grilling, orchestrate, diagnosing-bugs, test-driven-development, using-worktrees, handoff, domain-modeling); all ten ship here, so every in-pack reference resolves. References to skills outside this pack (`maestro`, `hyperframes`, `media-use`, `graphify`, `agent-reach`, `deep-research`, `code-review`, `simplify`, `security-review`, `review`, `docx`) are **optional specialists**: route to them when installed, otherwise do the work directly to the same standard and say the specialist was absent.
 
 ## Companion: maestro
 

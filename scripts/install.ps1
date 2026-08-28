@@ -78,6 +78,24 @@ if ($list -match 'hyperframes') {
   } else { Warn "skipped - only needed if you render video" }
 }
 
+Section "5. Generative engines (optional, detect only)"
+Write-Host "  Not auto-installed: one is a multi-GB GPU stack, the other is a paid service." -ForegroundColor DarkGray
+if (Have comfy) {
+  Ok "comfy-cli present - local ComfyUI is the free-per-run generation route"
+} else {
+  Warn "ComfyUI absent - every generation is billed; no free local route"
+  Write-Host "    pip install comfy-cli comfy-mcp; comfy install; comfy launch" -ForegroundColor DarkGray
+  Write-Host "    skills: /plugin marketplace add Comfy-Org/comfy-skills" -ForegroundColor DarkGray
+}
+if (Have higgsfield) {
+  Ok "higgsfield CLI present"
+} else {
+  Warn "Higgsfield CLI absent - maestro's generative modules are distilled from its skills"
+  Write-Host "    /plugin marketplace add higgsfield-ai/skills; /plugin install higgsfield@higgsfield" -ForegroundColor DarkGray
+  Write-Host "    mcp: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp" -ForegroundColor DarkGray
+  Write-Host "    PAID - generations spend credits." -ForegroundColor DarkGray
+}
+
 Section "Result"
 if ($Check)          { Write-Host "  (check only - nothing was changed)" }
 elseif ($Failed -eq 0) { Ok "stack ready" }

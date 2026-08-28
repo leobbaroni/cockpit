@@ -1,5 +1,96 @@
 # Changelog
 
+## 2.0.0 — 2026-08-28
+
+**Two disciplines the pack was missing, and a build phase that now names its order.** Cockpit
+had eight skills covering planning, orchestration, review, debugging, and delivery — and nothing
+at all on writing tests or isolating a workspace. Both gaps are the kind you don't notice,
+because their absence shows up as *other* skills' claims being unverifiable.
+
+Distilled from [obra/superpowers](https://github.com/obra/superpowers) (MIT), written in
+cockpit's own voice rather than vendored. Major because BUILD's contract changed and two skills
+joined the always-on set.
+
+### `test-driven-development` — the failing test comes first
+
+> If you didn't watch the test fail, you don't know if it tests the right thing.
+
+That is the whole argument, and it is stronger than "tests are good practice": a test you never
+saw fail might assert nothing, target the wrong function, or sit in a file the runner skips.
+Watching it go red is the only evidence it can detect the absence of the thing you're building.
+
+The iron law is **no production code without a failing test first**, and the uncomfortable
+corollary is that code written before its test gets deleted rather than kept as reference —
+because a test written to fit existing code asserts what the code does rather than what the
+feature needs.
+
+Also here: **verify red for the right reason** (a typo, a bad import, or a missing fixture is
+not a valid red); minimal green, then the *whole* suite, since a local green with three
+regressions elsewhere is a red; refactor while green; and the bug fix that starts with a
+reproduction — one artifact that proves the bug was real, proves the fix works, and stops it
+returning. Plus a table of what a passing test does **not** prove.
+
+### `using-worktrees` — isolation, and the baseline nobody takes
+
+Detect isolation you already have before creating any, with the **submodule false positive**
+guarded: `GIT_DIR != GIT_COMMON` is true inside a submodule too, so the superproject check runs
+first. Prefer the harness's native worktree tool over `git worktree` — bypassing it creates
+state the harness can't see or clean up. Verify the worktree directory is git-ignored *before*
+writing into it, or the whole second copy of the repo gets committed into the repo.
+
+The step that pays and gets skipped is the **clean test baseline**. Without it you cannot tell
+your regression from one that was already there, and a red baseline is the user's call to make
+knowingly rather than yours to discover later.
+
+### BUILD names its order
+
+The build phase was "run the execution contract, verify behaviorally, commit." It now states
+the loop — isolate and baseline → red → minimal green plus the full suite → refactor while green
+→ verify behaviorally → commit and log — because each step exists to stop a later one from
+lying. Plus: never start implementation on `main`/`master` without explicit consent.
+
+### Gate 4 gains freshness
+
+"Done means you ran the check" was already the rule. What was missing is *when*: **no completion
+claim without a verification run in the same message as the claim.** A suite that passed before
+your last edit says nothing about the code as it now stands, and reporting a summary of output
+you didn't just produce is indistinguishable from guessing.
+
+### The evidence-precedence rule → `grilling`
+
+Absorbed from Comfy's agent skills, because it settles a case cockpit's evidence discipline
+didn't cover — two lookups disagreeing inside one session. A lookup that **returns** something
+outranks older evidence; older **direct** evidence outranks a later **empty** lookup; and never
+deny something exists on an empty result alone — broaden the query first. Absence from a catalog
+is evidence about the catalog, not about the world.
+
+### `orchestrate` gains dispatch craft
+
+Fan out on **independent domains, not on task count** — parallel agents on a shared root cause
+produce three conflicting fixes for one problem. A subagent inherits nothing, so its context is
+constructed deliberately: one domain, the actual error text pasted in, explicit "don't touch"
+constraints, and a named return shape. Issue every dispatch **in one message** or they run in
+series. Then integrate against the full suite rather than the sum of their claims, because
+agents make systematic errors and a systematic error passes its own test.
+
+### `setup` and the installers learn the generative engines
+
+Two new Tier-2 rows — **ComfyUI + comfy-mcp** (generation on the user's own GPU, free per run,
+plus a hosted partner catalog; check the GPU, not just the install, since video models want
+16+ GB VRAM) and **Higgsfield** (hosted generation, Soul ID, Marketing Studio, Virality
+Predictor; paid, so say so before any batch). maestro 4.0.0's generative modules are distilled
+from both, so their absence changes what maestro can actually do.
+
+`install.sh` and `install.ps1` gain a **detect-only** section 5. Neither is auto-installed on
+purpose: one is a multi-GB GPU stack, the other is a paid service. Both scripts were re-run
+against a real machine rather than assumed correct.
+
+### Housekeeping
+
+- 8 → **10 skills**. README, INSTALL.md, AGENTS.md, and the plugin manifest all track it, and
+  every in-pack cross-reference was verified to resolve.
+- Requires **maestro 4.0.0** for the generative engine routing the new setup tiers point at.
+
 ## 1.8.0 — 2026-08-18
 
 **An installer, because "install everything" had no command.** `setup` could detect a gap and

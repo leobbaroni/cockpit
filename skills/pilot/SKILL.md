@@ -48,7 +48,18 @@ Run PLAN in full (never skip the interview for a multi-day build), ask once for 
 
 ## BUILD — next task, done properly
 
-Take the next open PLAN.md item (or the user's named task). Run every change through the **execution contract** below — restate, scope, tripwire, verify. Route by the specialist table before improvising. After each task: **verify behaviorally** (drive the flow / screenshot at ~380px and desktop — not just typecheck), commit per the project's push policy, append one line to `PROJECT_LOG.md`. Batches of 3+ tasks → propose the crew, then `orchestrate`.
+Take the next open PLAN.md item (or the user's named task). Run every change through the **execution contract** below — restate, scope, tripwire, verify. Route by the specialist table before improvising.
+
+**The build loop, in order.** Each step exists because skipping it makes a later step lie:
+
+1. **Isolate.** Anything multi-file, or any batch, starts in an isolated workspace — `using-worktrees`. It also takes the **baseline test run**, without which you cannot tell your regression from one that was already there.
+2. **Red.** The failing test comes before the implementation — `test-driven-development`. A bug fix starts with a test that reproduces it; a feature starts with a test that demands it. A test you never watched fail is a test you never watched work.
+3. **Green, minimally.** The least code that passes, then the **whole** suite — a local green with three regressions elsewhere is a red.
+4. **Refactor while green**, running the tests after each step.
+5. **Verify behaviorally** — drive the flow, screenshot at ~380px and desktop. A typecheck is not a verification.
+6. **Commit** per the project's push policy and append one line to `PROJECT_LOG.md`.
+
+Batches of 3+ tasks → propose the crew, then `orchestrate`. Never start implementation on `main`/`master` without the user's explicit say-so.
 
 ## REVIEW — tiered, routed, verified
 
@@ -138,6 +149,8 @@ Route to the named skill **when it's installed**; when it isn't, do the work dir
 | Brief-locking interview | `grilling` (+ `domain-modeling` = `grill-with-docs`) |
 | Task batches (3+), multi-agent builds, review waves | `orchestrate` |
 | Hard bugs, perf regressions | `diagnosing-bugs` |
+| Implementing any feature, fix, refactor, or behavior change | `test-driven-development` — the failing test comes first |
+| Isolating a workspace before a feature or a batch | `using-worktrees` — native tool first, `git worktree` only as fallback |
 | Glossary terms, ADRs | `domain-modeling` |
 | Logs, guides, manuals, delivery cleanup | `handoff` |
 | Repo/corpus knowledge-graph questions | `graphify` |
@@ -196,6 +209,8 @@ Two corollaries:
 Every task becomes a verifiable goal before it starts: "add validation" → *write tests for the invalid inputs, make them pass*; "fix the bug" → *write a failing repro, make it pass*; "refactor X" → *tests green before and after*. Multi-step work states the plan as `step → verify: check` lines.
 
 **"Done" means you ran the check and saw the result.** Paste the command and its output. A green typecheck is not done, a passing build is not done, and "this should work" is not done — behavioral changes get the flow driven, UI changes get looked at, and adjacent flows the change could regress get checked too.
+
+**And the evidence has to be fresh.** No completion claim without a verification run *in the same message as the claim* — a suite that passed before your last edit says nothing about the code as it now stands. Run it, read the exit code, count the failures, and only then make the claim. Reporting a summary of output you didn't just produce is the failure this rule exists to catch, and it is indistinguishable from guessing.
 
 If you can't state the check, the task isn't specified yet — go back to Gate 1.
 

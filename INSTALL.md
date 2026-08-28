@@ -45,7 +45,7 @@ toolchain. It installs the skills that know how to use one.
 
 | | Arrives with `/plugin install cockpit@cockpit` | Notes |
 |---|---|---|
-| cockpit's eight process skills | ✅ automatic | 188 KB |
+| cockpit's ten process skills | ✅ automatic | 188 KB |
 | maestro, with its vendored depth library | ✅ automatic, as a declared dependency | 5.6 MB, of which 5.0 MB is `library/` |
 | Node ≥ 22 | ❌ | Your machine's job |
 | FFmpeg on `PATH` | ❌ | Only needed for the HyperFrames render path |
@@ -66,7 +66,7 @@ what is present and do the work directly when a specialist is absent.
 
 cockpit declares `dependencies: ["maestro"]`, so one install resolves both. Verified on a
 genuinely clean config directory: cockpit and maestro both land `✔ enabled` with the complete
-tree — all eight process skills, all ten vendored corpora.
+tree — all ten process skills, all eleven vendored corpora.
 
 Two consequences of the dependency worth knowing up front:
 
