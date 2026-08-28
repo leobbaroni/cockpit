@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 — 2026-08-28
+
+`setup`'s ComfyUI tier now names the **no-GPU fallback**: `/plugin install
+comfy-cloud@comfy-skills` runs the same workflows on Comfy's hardware. Stated with its two
+costs — it needs a subscription, and it sees a standard catalog rather than this machine's
+custom nodes. Pairs with maestro 4.0.1.
+
 ## 2.0.0 — 2026-08-28
 
 **Two disciplines the pack was missing, and a build phase that now names its order.** Cockpit
