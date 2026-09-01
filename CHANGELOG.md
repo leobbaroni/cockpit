@@ -1,5 +1,51 @@
 # Changelog
 
+## 2.1.0 — 2026-09-01
+
+**Cross-harness integrity is a check you run, not a claim.** New `scripts/check-pack.mjs` verifies
+the failures that break silently: a skill citing a sibling that isn't shipped, an `AGENTS.md` index
+drifted from `skills/` — which breaks every non-Claude harness with no visible error — Claude-only
+machinery written with no label or fallback, and a stated count that no longer matches disk. Pass
+`../maestro` to check the companion's router and library pointers too. It was negative-tested
+against both failure modes before being trusted, and it caught one real bug (below).
+
+### headcount, routed rather than bundled
+
+[headcount](https://github.com/cbrock84/headcount) (MIT) is 16 departments, 172 skills, covering
+business-domain work this pack has no opinion on — threat models, pricing, contracts, hiring loops,
+GTM, program governance. **It is not vendored, and that is the integration, not a shortcut.**
+Always-on cost scales with the number of skills installed, so all 172 would cost roughly 17x this
+entire pack and slow every unrelated session; headcount's own design is per-department installs.
+
+`pilot` gains a requirement → department table so the agent selects one department from what the
+request actually needs, proposes that single install, and asks first. Both harness paths are given:
+the plugin marketplace on Claude Code, a shallow clone plus reading
+`plugins/<department>/skills/<skill>/SKILL.md` on Codex. `setup` reports it as *available*, not
+missing — absent is the correct default. Always-on cost is unchanged at ~1,155 tokens.
+
+### `orchestrate` absorbs headcount's two best ideas
+
+**Split by exclusive write surface, not by topic.** A topic split has no checkable boundary — two
+agents told to handle "SEO" and "UI" both end up editing the same token file, and neither is wrong.
+Surfaces are mechanical: you can look at an assignment and see whether two agents can collide. The
+asymmetry that follows is useful — a reviewer holds no surface, so it can *always* run in parallel,
+which is why a review wave can be as wide as you like while a build wave is bounded by how finely
+the surfaces divide. The orchestrator owns no surface and is the sole committer.
+
+**State each agent's authority, not just its task.** A surface says where an agent may write; it
+never said whether that write may *land*. Now it is in the assignment: `autonomous` (take the
+result), `proposes` (surface the diff first), `escalates` (the work itself is the decision — don't
+dispatch it unasked). Most work is genuinely autonomous, and saying so beats marking everything
+"proposes", because a gate on every item is a gate on nothing.
+
+### Fixed
+
+- `setup`'s plugin-CLI passage gave `claude plugin update` / `/reload-plugins` with no harness
+  label, so a Codex reader got commands that don't exist. Now labelled, with the one-line
+  equivalent (`git pull` in each clone).
+- The first draft of the headcount block had the same bug — Claude-only install commands and no
+  Codex path. `check-pack.mjs` caught it, which is the argument for the script.
+
 ## 2.0.1 — 2026-08-28
 
 `setup`'s ComfyUI tier now names the **no-GPU fallback**: `/plugin install

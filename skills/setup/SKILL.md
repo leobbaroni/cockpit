@@ -130,6 +130,7 @@ A clean machine has **none** of these — Tier 0 installs cockpit and maestro an
 | Skill | Unlocks | Install |
 |---|---|---|
 | **impeccable** | **The direction round's roll.** maestro's `§3` hands off to `concept-seed` and its decision page when impeccable is present; without it the round runs maestro's prose version — same discipline, no live approval page, no per-card comps, no re-roll pool | `npx impeccable install --providers=claude --scope=global` (github.com/pbakaus/impeccable). **Verify the roll specifically**: `~/.claude/skills/impeccable/scripts/concept-seed.mjs` must exist — an older install carries the hook and live scripts without it, and reports as present while the roll is missing |
+| **headcount** — 16 departments, 172 skills | Business-domain work the pack has no opinion on: threat models, pricing, contracts, hiring loops, GTM, support, program governance. `pilot`'s routing table maps a requirement to one department | `/plugin marketplace add cbrock84/headcount` then `/plugin install <department>@headcount` (github.com/cbrock84/headcount, MIT). **Install one department, never the marketplace** — always-on cost scales with skill count, so all 172 costs roughly 17x this whole pack; one department is 6-19 skills. Report it as available, not as missing: absent is the correct default |
 | **hyperframes** suite — 19 skills | HTML-to-video authoring, the lint/check/snapshot/render loop, every specialized workflow (product launch, explainer, captions, motion graphics, slideshow), **and `media-use` and `figma`, which ship inside it** | `/plugin install hyperframes@claude-plugins-official` — it is in Anthropic's official marketplace, so it installs exactly like cockpit. Add the marketplace first if needed: `/plugin marketplace add anthropics/claude-plugins-official`. Outside the plugin system: `npx skills add heygen-com/hyperframes --full-depth`, which ships one extra skill (below) |
 | **media-use** | Resolving music, SFX, images, icons, logos, voiceover, captions, grades, and LUTs to real files instead of improvising them | **No separate install** — it ships inside the hyperframes suite above. Do not send the user hunting for it |
 | **Remotion** | React-to-video, frame-exact programmatic control, and shotcraft's template mode | `npx create-video@latest --yes --blank --no-tailwind my-video && cd my-video && npm i`, per project. `npx remotion upgrade` keeps the library and its bundled skills current |
@@ -174,7 +175,7 @@ different mechanism, and none of them are automatic:
 clone of the marketplace, so without refreshing it first the update is a no-op that reports
 success. Run the pair, in that order, always.
 
-Two more facts worth stating rather than rediscovering: `update` and `enable` need the qualified
+Two more Claude Code facts worth stating rather than rediscovering (on a harness with no plugin system, this whole step is `git pull` in each clone): `update` and `enable` need the qualified
 `name@marketplace` form (a bare `claude plugin update cockpit` fails with `Plugin not found`),
 and every update prints *restart required to apply* — the running session keeps the old skill
 bodies until `/reload-plugins` or a restart. Verify afterwards with `claude plugin list` and

@@ -31,6 +31,40 @@ On Claude Code the current defaults are: lead/design → the session's own model
 
 **Fan out on independent domains, not on task count.** Split when the pieces have genuinely separate root causes — different subsystems, different test files, different bugs — and each can be understood without the others. Keep them together when fixing one might fix the rest, when understanding needs the whole system in view, or when you don't yet know what's broken: parallel agents on a shared cause produce three conflicting fixes for one problem.
 
+### Split by write surface, not by topic
+
+**Give each agent exactly one path prefix it may write, and verify no two overlap.** A topic
+split has no checkable boundary: two agents told to handle "SEO" and "UI" both end up editing the
+same token file, and neither of them is wrong. A surface split is mechanical — you can look at the
+assignment and *see* whether two agents can collide.
+
+Three roles follow from it, and the asymmetry is the useful part:
+
+| Role | Surface | Runs in parallel? |
+|---|---|---|
+| **Builder** | Exactly one exclusive path prefix. Never commits | With any builder holding a different surface |
+| **Reviewer** | None — permanently read-only | **Always.** It holds no surface, so it cannot collide with anything |
+| **Orchestrator** (you) | None, and the **sole committer** | — |
+
+Reviewers being surface-less is why a review wave can be as wide as you like while a build wave
+is bounded by how finely the surfaces divide.
+
+### State each agent's authority, not just its task
+
+A surface answers *where* an agent may write. It has never answered whether that write may **land**
+without a decision — which in practice gets settled per dispatch, from memory, by whoever is
+driving. Say it in the assignment instead:
+
+- **autonomous** — dispatch it and take the result. The surface is the only gate needed.
+- **proposes** — it may do the work; you surface the diff before anything lands.
+- **escalates** — do not dispatch it unasked. **The work itself is the decision**, and it belongs
+  to the user.
+
+Most work is genuinely autonomous, and saying so plainly beats marking everything "proposes" —
+a review gate on every item is a gate on nothing, because it stops being read. Reserve `escalates`
+for what it is for: schema changes, deletions, anything touching production or money, and any
+choice the user would want to make themselves.
+
 **A subagent inherits nothing.** It gets the context you construct, so build it deliberately — one problem domain, the actual error text and failing names pasted in, explicit constraints on what it may not touch ("fix the tests, don't change production code"), and a named return shape. The characteristic failures are a scope too broad to act on ("fix all the tests"), a symptom with no location, and no stated output — which leaves you unable to say what changed.
 
 **Issue every dispatch in one message** — that is what makes them concurrent; one per message runs them in series. Then integrate deliberately: read each summary, check whether two agents touched the same code, run the **full** suite rather than the sum of their claims, and spot-check the diffs. Agents make systematic errors, and a systematic error passes its own test.

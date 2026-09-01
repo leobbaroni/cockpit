@@ -21,7 +21,7 @@ When the user's request matches a trigger below, **open that skill file and foll
 | **domain-modeling** | Pinning domain terminology, recording an architectural decision (ADR), maintaining CONTEXT.md | `skills/domain-modeling/SKILL.md` |
 | **setup** | "set up cockpit", "install the stack", "what's missing", "why can't it render video", or a fresh machine | `skills/setup/SKILL.md` |
 
-Skills reference each other by name (pilot routes to grilling, orchestrate, diagnosing-bugs, test-driven-development, using-worktrees, handoff, domain-modeling); all ten ship here, so every in-pack reference resolves. References to skills outside this pack (`maestro`, `hyperframes`, `media-use`, `graphify`, `agent-reach`, `deep-research`, `code-review`, `simplify`, `security-review`, `review`, `docx`) are **optional specialists**: route to them when installed, otherwise do the work directly to the same standard and say the specialist was absent.
+Skills reference each other by name (pilot routes to grilling, orchestrate, diagnosing-bugs, test-driven-development, using-worktrees, handoff, domain-modeling); all ten ship here, so every in-pack reference resolves. References to skills outside this pack (`maestro`, `hyperframes`, `media-use`, `graphify`, `agent-reach`, `deep-research`, `code-review`, `simplify`, `security-review`, `review`, `docx`, and `headcount`'s per-department business skills) are **optional specialists**: route to them when installed, otherwise do the work directly to the same standard and say the specialist was absent.
 
 ## Companion: maestro
 
