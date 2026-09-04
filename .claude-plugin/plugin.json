@@ -1,8 +1,8 @@
 {
   "name": "cockpit",
   "displayName": "Cockpit",
-  "version": "2.1.0",
-  "description": "The process pack: pilot (phase detection, ultra-planning, review routing, the four-gate execution contract), grilling (the evidence-tagged interview that turns an ask into a build-ready plan), grill-with-docs (grilling + live ADRs/glossary), orchestrate (multi-agent task batches), test-driven-development (the failing test first, watched failing), using-worktrees (isolation and a clean baseline before the work starts), handoff (logs, guides, delivery), diagnosing-bugs (repro-first debugging), domain-modeling (glossary + ADRs), and setup (detect what the stack can do on this machine and close the gaps). Installs the maestro design/motion/video skill as a dependency. Harness-neutral: Claude Code native, Codex via AGENTS.md.",
+  "version": "3.0.0",
+  "description": "The process pack: pilot (a task graph: phase detection, one ritual node per phase, a frozen state contract, the four-gate execution discipline), grilling (the evidence-tagged interview that turns an ask into a build-ready plan), grill-with-docs (grilling + live ADRs/glossary), orchestrate (multi-agent task batches), test-driven-development (the failing test first, watched failing), using-worktrees (isolation and a clean baseline before the work starts), handoff (logs, guides, delivery), diagnosing-bugs (repro-first debugging), domain-modeling (glossary + ADRs), and setup (detect what the stack can do on this machine and close the gaps). Installs the maestro design/motion/video skill as a dependency. Harness-neutral: Claude Code native, Codex via AGENTS.md.",
   "author": {
     "name": "leobbaroni",
     "email": "leobbaroni@gmail.com"

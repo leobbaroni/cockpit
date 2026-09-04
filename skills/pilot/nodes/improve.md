@@ -1,0 +1,4 @@
+# IMPROVE node
+
+
+If the ask is vague ("make it better", "feels off"), extract a concrete brief FIRST — one batched question, not a build attempt: **one reference** (site, app, screenshot — if it's behind a login, ask for a screenshot instead of silently skipping), **2–3 banned qualities** ("no card grid", "not so text-dense"), **one checkable done-condition** ("the table fits 380px without horizontal scroll"). Then route: UI/UX → `maestro` (critique loop; its `commands` module has a named protocol for most improvement asks — bolder, quieter, distill, polish, typeset, layout, clarify — so match the ask to one instead of improvising; the direction round if the direction itself is in question); dead weight → `simplify`; suspected bug with a known diff → REVIEW, cause unknown → DEBUG; performance → **measure first** (profile/timing baseline), never optimize blind. Re-verify against the done-condition before reporting.

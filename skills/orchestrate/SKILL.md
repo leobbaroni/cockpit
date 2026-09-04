@@ -71,7 +71,82 @@ choice the user would want to make themselves.
 
 **Announce the crew before spending on it.** If `pilot` already proposed a model mapping and the user accepted it, use that mapping and do not re-ask. Otherwise state the assignment in one short table (task or dimension → role → model) before the first agent runs, and invite correction — the user may know a step deserves a stronger model than its difficulty suggests. Any model the user names explicitly wins over these defaults, always. When a step fights back, climb the ladder in §2a rather than silently re-running it bigger.
 
-## 2a. When a task fights back — the escalation ladder
+## 2a. The crew proposal — agree the models before fanning out
+
+Never fan work out on a silently-chosen crew. Whenever a batch is about to fan out — a PLAN handoff, a KICKOFF, a BUILD batch of 3+, or a Tier-2 review wave — propose the crew first and get a yes. `pilot` never proposes a crew itself; it hands the batch here.
+
+**1. Read what's actually reachable.** Name the models *this session* can use rather than reciting a canon: harness lineups change and go stale. Claude Code sets a model per subagent, so a batch can mix tiers; Codex and most other harnesses run one model for the whole session with no per-subagent switching. If only one model is reachable, say so in one line and skip to executing — there is no choice to present.
+
+**2. Map roles, not names.** Four roles carry any batch:
+
+| Role | Wants | Picks the… *(parenthesised names are today's Claude Code tiers — substitute your harness's equivalents)* |
+|---|---|---|
+| **Lead / designer** | decomposition, judgment, final review, design taste | **the model the session is set to** — whatever the user selected, unchanged |
+| **Hard** | architecture, tricky bugs, cross-cutting refactors — work **classified hard before it runs** | strongest reasoner (Opus 5) |
+| **Mechanical** | known fixes, renames, boilerplate, docs, config, bulk edits | fast/cheap tier (Sonnet 5; Haiku 4.5 for trivial bulk) |
+| **Review** | fresh adversarial eyes | a *different* model from the one that wrote the code, whenever the harness offers one — diverse perspective catches what self-review cannot |
+
+**The session model is the user's standing instruction.** Whatever they switched to is the lead and the designer — do not propose demoting it, do not route lead work to a subagent on a different model to "save cost", and do not switch the top-level model to route work. **The lead role is what never moves**; implementation work routes freely around it:
+
+- **Down** to the fast tier for mechanical items.
+- **Up** to the strongest reasoner for hard implementation — architecture, tricky bugs, anything classified hard up front. Routing a hard *subtask* up is not a demotion of the lead; the lead still decomposes, reviews, and decides. **A task that has already failed is a different question**: it climbs the ladder (`orchestrate` §2a) rather than jumping a tier, because the first rung is a better prompt and most misses are missing context.
+- **Sideways** to a different model for adversarial review.
+
+If the session model is already the strongest reasoner available, the up-route is a no-op and lead and hard collapse into one tier; say so in a line instead of inventing a distinction.
+
+**3. Propose concretely.** Show the assignment for *this* batch — each task or review dimension → role → model — with a one-line reason and the honest cost/latency implication. A table the user can scan and correct beats a paragraph of philosophy.
+
+**4. Offer the real alternatives, ask once.** Present the proposal (recommended) against **all-frontier** (best quality, slower and pricier), **all-fast** (cheap sweep, weak on architecture), and **custom**. A model the user names explicitly always wins and is never re-litigated.
+
+**5. Remember the answer.** Record the accepted mapping for the session — and into `PLAN.md` when the batch came from there — then propose *once*, not per task. Re-open it only when the work changes character (a mechanical batch turning architectural), or when the user asks. A failing stage does **not** re-open the crew question — that is what the rescue crew below is for, agreed once and then acted on without a fresh negotiation.
+
+Skip the ceremony when a batch is small and uniformly mechanical: state the crew in one line and proceed.
+
+### The rescue crew — the second model, and what wakes it
+
+A crew is two decisions, not one. The first is who does the work; the second is **who gets called when the work fights back**. Propose both in the same breath, because deciding it mid-failure is deciding it while annoyed.
+
+**Ask for one model and one number.** The rescue model — the strongest reasoner reachable, or whatever the user names — and the attempt count that wakes it (default **2**). Then state the signals that wake it *regardless* of count, because repetition is a weak proxy for difficulty: three attempts at a rename and three at a concurrency bug are not the same event.
+
+| Wakes the rescue crew | Why this one |
+|---|---|
+| **N failed attempts on one task** (default 2) | The plain counter. Per task, and **a passing verification clears it** — task 7 failing twice says nothing about task 8 |
+| The same test or check red **twice** | The fix isn't landing where the failure is |
+| A reviewer raising a **blocking finding on the same file twice** | The implementer is not reading the finding |
+| An agent **reporting itself blocked** | Fires on attempt one; waiting for a count wastes the information |
+
+**The rescue crew reviews and fixes in one pass**, deliberately. Splitting them hands the diagnosis to a second model as a written finding, and the diagnosis is the expensive part — a correct diagnosis re-derived from a summary is how you get a confident wrong fix. **The original tier then runs the acceptance check only** — not a re-review, just the check — which restores independent eyes on the outcome without paying for a second full pass.
+
+**Announce every escalation in one line — which rung, what fired it, which tier — and keep working.** Do not pause for permission. Silence is consent, the user can interrupt, and stalling an unattended batch on the exact task that needed help is the worst available outcome. Since the ladder never stops on its own, **this announcement is the only brake**, so it is not optional.
+
+The ladder itself lives in `orchestrate` §2a, because that is where the work runs.
+
+Record the rescue model and its count alongside the rest of the mapping — in `PLAN.md` when the batch came from a plan — and don't re-ask.
+
+## 2b. The shape of the work decides — the stop rule
+
+Before any fan-out, the question that overrides every routing instinct: **where does this work split into pieces that never read each other's results?** Split *only* that. Everything sequential stays with one agent.
+
+The evidence is unusually clean. In a 180-configuration study (Google DeepMind × MIT, *Towards a Science of Scaling Agent Systems*), coordinated teams beat a single agent by ~80% on work that splits into independent pieces — and **every multi-agent configuration lost on sequential work** where each step needs the full picture, degrading 39–70%. Uncoordinated agents amplified each other's errors **17.2×**; a single coordinator owning the merge cut that to 4.4×. More agents is not a strategy; the shape of the work is.
+
+Three habits follow:
+
+- **Delete fake edges first.** For every "and then" in a pipeline, ask whether the next job actually reads the previous one's output. "Summarize this file and then check the calendar" — the calendar step never uses the summary, so the edge is fake and the two jobs run in parallel. Most hand-built pipelines contain two or three.
+- **Converge on the diamond.** Split → parallel workers → **verify in a separate context** → one owner merges. The verification node is non-negotiable: a model grading its own work in its own context misses most of its own mistakes. Give each verifier a *different* question — is it correct, is it current, is the source real — because diverse skeptics catch what identical ones cannot.
+- **One owner of the merge.** Findings never merge without it; that single fact is the 17.2× → 4.4× difference.
+
+**If you can collapse the nodes back into one agent's loop and lose nothing, do that.** A five-node graph to summarize a PDF is the canonical over-build; one agent with a good verifier does it.
+
+## 2c. Four caps that keep a graph from becoming an expensive accident
+
+1. **Every loop gets a maximum number of rounds** — a weak verifier now burns tokens in parallel, so the cap is set *before* the first round, not discovered at the invoice.
+2. **One writer per file** — no two jobs mutate the same artifact (§2's write-surface rule is this, applied to code).
+3. **The routing lives in written steps.** The model fills the jobs; it does not redraw the plan mid-run. A run that changes its own graph is optimizing its own target.
+4. **A hard cap on how many agents can spawn**, stated up front, honored even when one more would "just help."
+
+**The human is a node.** Route every irreversible edge — send, publish, delete, deploy, spend — through explicit approval, and place the gate **where a mistake is expensive to undo, not on every step.** A gate on everything makes the user the bottleneck; a gate on nothing means nobody is watching. Judge the run on numbers that cannot argue back — tests that ran, a check that exited 0, money that landed — never on its own self-report.
+
+## 2d. When a task fights back — the escalation ladder
 
 A task that fails is not a task to abandon and not a task to retry harder. It climbs, and **every rung costs more effort than the one below it** — that ordering is the whole design, because a ladder whose top rung is easier than its bottom rung is a ladder people fall down.
 

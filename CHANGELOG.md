@@ -1,5 +1,76 @@
 # Changelog
 
+## 3.0.0 — 2026-09-01
+
+**pilot becomes a task graph, and costs a fifth of what it did.** The old pilot was a 289-line
+monolith that loaded on every invocation: ~7,500 tokens whether you were in BUILD or DELIVER,
+~17,000 once it pulled grilling in. Measured, the weight was not where the work was — the
+specialist routing table (73 lines), the execution contract (63), and the crew proposal (52)
+wrapped **about 57 lines of actual phase rituals**. Roughly 190 lines of meta-machinery loading
+so that one phase could run.
+
+That is the failure graph engineering names: a graph — nodes, edges, state on disk, a human
+gate — written as a single flat prompt that loads every node every time. Breaking release
+because pilot's file layout, the crew proposal's home, and the contract's location all move.
+
+### The structure
+
+| File | Role | Loads |
+|---|---|---|
+| `SKILL.md` | The router: Step 0, phase table, dispatch. ~75 lines | Every pilot turn |
+| `nodes/<phase>.md` | One ritual each — plan, build, review, improve, debug, deliver | **One per turn** |
+| `STATE.md` | The state contract | Once per session |
+| `CONTRACT.md` | The four gates | Once per session |
+| `ROUTING.md` | Outside-pack specialists, incl. headcount's department table | Only when reaching outside |
+
+Measured on a typical BUILD turn: **7,473 → 1,711 tokens (22% of the original).** With CONTRACT
+and STATE both loaded once, still under half. The phase rituals themselves are unchanged — they
+were split out verbatim, then re-pointed.
+
+### `STATE.md` — designed state, one writer per file, frozen anchors
+
+The graph-engineering principle that mattered most: *"decide what travels along the edges and
+who's allowed to write to it — state drift is the number one way graphs rot."* pilot had five
+state files and no rule about who wrote them. Now each has exactly one writer (`SPEC.md` by PLAN
+then append-only; `PLAN.md` created by PLAN, checked off by BUILD; the log by every phase,
+append-only), each phase has a stated leaving condition, and a REVIEW that finds the spec wrong
+records a finding for PLAN rather than editing `SPEC.md`.
+
+And **anchors** — external references the optimizing machinery may not rewrite: `SPEC.md`'s
+frozen acceptance criteria, the test suite's verdict, every repo-owned check, and the user's
+actual approval. When a node's output contradicts an anchor, the node is wrong, by definition.
+The four gates in `CONTRACT.md` are prose you read and can rationalize past; the anchors are the
+part you can't, and the file says so.
+
+### `orchestrate` gains the stop rule, with numbers
+
+The crew proposal moves from pilot to `orchestrate` §2a, where fan-out actually happens. Beside
+it, the strongest thing in the graph-engineering material: from the DeepMind × MIT
+180-configuration study, coordinated teams beat a single agent by ~80% on work that **splits into
+independent pieces** — and *every* multi-agent configuration **lost** on sequential work,
+degrading 39–70%; uncoordinated agents amplified errors 17.2×, and one owner of the merge cut it
+to 4.4×. So: split only where the pieces never read each other's results, delete fake edges
+("summarize this and then check the calendar" has no real edge), converge on the diamond with
+verification in a separate context, and one owner of the merge. *If you can collapse the nodes
+back into one agent's loop and lose nothing, do that.*
+
+Plus four caps stated before the first round — a maximum on loop rounds, one writer per file, the
+routing in written steps the model fills but does not redraw, a hard cap on spawned agents — and
+the human-gate placement rule: **where a mistake is expensive to undo, not on every step.**
+
+### Fixed
+
+- Step 0 ran `git log` and `git status` unconditionally, so pilot's opener failed on any folder
+  without a repository — including a fresh project it was about to kick off. Now conditional on
+  `git rev-parse --git-dir`, with a four-word skip.
+- KICKOFF was a phase in the table but only ever meant "PLAN, then BUILD" — a fake node. It now
+  routes to the PLAN node, which ends by handing to BUILD.
+
+Sources: [eigent.ai — Graph Engineering for AI Agents](https://www.eigent.ai/blog/graph-engineering-ai-agents),
+[codejunkie99/graph-engineering](https://github.com/codejunkie99/graph-engineering) (MIT — the
+task-graph patterns),
+[AI Builder Club — Graph Engineering Guide](https://www.aibuilderclub.com/blog/graph-engineering-guide-2026).
+
 ## 2.1.0 — 2026-09-01
 
 **Cross-harness integrity is a check you run, not a claim.** New `scripts/check-pack.mjs` verifies

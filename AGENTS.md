@@ -10,7 +10,7 @@ When the user's request matches a trigger below, **open that skill file and foll
 
 | Skill | Load when the user says / needs | File |
 |---|---|---|
-| **pilot** | "plan / ultra-plan / spec this out", "kick off / start building X", "review this / audit", "improve / polish", "what's next / continue", any vague build/improve/review ask — or session start on an ongoing project. Also carries the **execution contract**, the four gates every code change runs through in any phase | `skills/pilot/SKILL.md` |
+| **pilot** (router + `nodes/`, `STATE.md`, `CONTRACT.md`, `ROUTING.md`) | "plan / ultra-plan / spec this out", "kick off / start building X", "review this / audit", "improve / polish", "what's next / continue", any vague build/improve/review ask — or session start on an ongoing project. Also carries the **execution contract**, the four gates every code change runs through in any phase | `skills/pilot/SKILL.md` |
 | **grilling** | "grill me", stress-test a plan or design before building, or any ask too big to start on — the interview that turns it into a build-ready plan (`TRACKS.md` and `PLAN-FORMAT.md` sit alongside it) | `skills/grilling/SKILL.md` |
 | **grill-with-docs** | A grilling interview that must also produce ADRs + a glossary as decisions land | `skills/grill-with-docs/SKILL.md` |
 | **orchestrate** | "orchestrate", a batch of 3+ tasks handed over at once, multi-agent builds, lead-dev mode | `skills/orchestrate/SKILL.md` |
